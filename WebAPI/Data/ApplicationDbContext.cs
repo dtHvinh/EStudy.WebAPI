@@ -5,7 +5,7 @@ using WebAPI.Models;
 
 namespace WebAPI.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, int>(options)
 {
     public DbSet<Answer> Answers { get; set; } = default!;
     public DbSet<Question> Questions { get; set; } = default!;

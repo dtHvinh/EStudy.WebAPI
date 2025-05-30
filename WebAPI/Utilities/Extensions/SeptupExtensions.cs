@@ -16,6 +16,8 @@ public static class SeptupExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseNpgsql(Config.GetConnectionString("Postgre"));
+
+            //options.EnableSensitiveDataLogging();
         });
 
         services.AddIdentity<User, Role>(options =>
