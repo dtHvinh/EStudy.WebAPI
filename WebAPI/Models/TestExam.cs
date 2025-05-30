@@ -12,5 +12,7 @@ public class TestExam
     public int CreatorId { get; set; }
     public User Creator { get; set; } = default!;
 
+    public bool IsPublic { get; set; }
+
     public ICollection<Question> Questions { get; set; } = default!;
 }

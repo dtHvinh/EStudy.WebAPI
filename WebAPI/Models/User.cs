@@ -12,5 +12,6 @@ public class User : IdentityUser<int>
     public ICollection<Blog> Blogs { get; set; } = default!;
     public ICollection<FlashCardSet> FlashCardSets { get; set; } = default!;
     public ICollection<CourseEnrollment> Enrollments { get; set; } = default!;
+    public ICollection<StudySchedule> StudySchedules { get; set; } = default!;
 }
 

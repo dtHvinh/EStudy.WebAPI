@@ -1,12 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Models;
 
 [Table("Courses")]
+[Index(nameof(Slug))]
 public class Course
 {
     public int Id { get; set; }
     public required string Title { get; set; }
+    public required string Slug { get; set; }
     public required string Description { get; set; }
 
     [ForeignKey(nameof(Instructor))]

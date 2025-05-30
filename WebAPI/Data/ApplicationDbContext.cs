@@ -20,6 +20,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TestAttempt> TestAttempts { get; set; } = default!;
     public DbSet<TestExam> TestExams { get; set; } = default!;
     public DbSet<VoiceCallSession> VoiceCallSessions { get; set; } = default!;
+    public DbSet<StudySchedule> StudySchedules { get; set; } = default!;
+    public DbSet<StudyActivity> StudyActivities { get; set; } = default!;
+    public DbSet<StudyTopic> StudyTopics { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
