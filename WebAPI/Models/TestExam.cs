@@ -1,0 +1,16 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebAPI.Models;
+
+[Table("TestExams")]
+public class TestExam
+{
+    public int Id { get; set; }
+    public required string Title { get; set; }
+
+    [ForeignKey(nameof(Creator))]
+    public int CreatorId { get; set; }
+    public User Creator { get; set; } = default!;
+
+    public ICollection<Question> Questions { get; set; } = default!;
+}
