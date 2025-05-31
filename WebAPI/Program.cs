@@ -17,21 +17,10 @@ SeptupExtensions.Config = builder.Configuration;
 builder.Services.AddOpenApi();
 builder.Services.AddFastEndpoints();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "Default",
-                      policy =>
-                      {
-                          policy.WithOrigins(
-                              "http://localhost:7285");
-                          policy.AllowAnyHeader();
-                          policy.AllowAnyMethod();
-                          policy.AllowCredentials();
-                      });
-});
-
+builder.Services.ConfigureCors();
 builder.Services.ConfigureDatabase();
 builder.Services.ConfigureJwtAuthentication();
+builder.Services.RegisterServices();
 
 var app = builder.Build();
 

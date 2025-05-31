@@ -7,7 +7,6 @@ namespace WebAPI.Models;
 public class User : IdentityUser<int>
 {
     public required string Name { get; set; }
-    public bool IsInstructor { get; set; }
 
     public ICollection<Blog> Blogs { get; set; } = default!;
     public ICollection<FlashCardSet> FlashCardSets { get; set; } = default!;

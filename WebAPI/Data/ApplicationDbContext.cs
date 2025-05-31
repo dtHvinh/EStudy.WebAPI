@@ -26,7 +26,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+
         builder.Entity<User>()
+            .ToTable("Users")
             .Ignore(e => e.ConcurrencyStamp)
             .Ignore(e => e.LockoutEnabled)
             .Ignore(e => e.LockoutEnd)
@@ -39,5 +42,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Ignore<IdentityUserToken<int>>();
         builder.Ignore<IdentityUserLogin<int>>();
         builder.Ignore<IdentityRoleClaim<int>>();
+        builder.Ignore<IdentityUserClaim<int>>();
+
+        builder.Entity<IdentityUserRole<int>>()
+            .ToTable("UserRoles");
+
+        builder.Entity<Role>()
+            .ToTable("Roles")
+            .HasData([
+                new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+                new Role { Id = 2, Name = "Student", NormalizedName = "STUDENT" },
+                new Role { Id = 3, Name = "Instructor", NormalizedName = "INSTRUCTOR" }
+            ]);
     }
 }

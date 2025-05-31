@@ -65,4 +65,30 @@ public static class SeptupExtensions
 
         return services;
     }
+
+    public static IServiceCollection ConfigureCors(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+         {
+             options.AddPolicy(name: "Default",
+                               policy =>
+                               {
+                                   policy.WithOrigins(
+                                       "http://localhost:7285");
+                                   policy.AllowAnyHeader();
+                                   policy.AllowAnyMethod();
+                                   policy.AllowCredentials();
+                               });
+         });
+
+        return services;
+    }
+
+    public static IServiceCollection RegisterServices(this IServiceCollection services)
+    {
+        // Register services using the attribute-based approach
+        services.AddServicesFromAssembly(typeof(SeptupExtensions).Assembly);
+
+        return services;
+    }
 }

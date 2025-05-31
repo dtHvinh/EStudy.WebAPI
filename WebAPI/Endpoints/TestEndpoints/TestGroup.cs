@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 
-namespace WebAPI.Endpoints.Groups;
+namespace WebAPI.Endpoints.TestEndpoints;
 
 public class TestGroup : Group
 {
