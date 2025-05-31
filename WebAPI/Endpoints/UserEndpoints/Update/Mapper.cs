@@ -1,10 +1,10 @@
 ﻿using Riok.Mapperly.Abstractions;
 using WebAPI.Models;
 
-namespace WebAPI.Endpoints.AccountEndpoints.Register;
+namespace WebAPI.Endpoints.UserEndpoints.Update;
 
 [Mapper(AllowNullPropertyAssignment = false)]
 public static partial class Mapper
 {
-    public static partial User ToUser(this RegisterRequest request);
+    public static partial void ApplyUpdate(this UpdateUserRequest request, User user);
 }
