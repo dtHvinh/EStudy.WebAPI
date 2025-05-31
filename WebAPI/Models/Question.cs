@@ -1,11 +1,15 @@
-﻿namespace WebAPI.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebAPI.Models;
 
 public class Question
 {
     public int Id { get; set; }
-    public string Text { get; set; }
-    public int ExamId { get; set; }
-    public TestExam Exam { get; set; }
+    public required string Text { get; set; }
 
-    public ICollection<Answer> Answers { get; set; }
+    [ForeignKey(nameof(TestExam))]
+    public int ExamId { get; set; }
+    public TestExam Exam { get; set; } = default!;
+
+    public ICollection<Answer> Answers { get; set; } = default!;
 }

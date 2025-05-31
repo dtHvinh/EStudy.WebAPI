@@ -22,7 +22,7 @@ public static class SeptupExtensions
 
         services.AddIdentity<User, Role>(options =>
         {
-            options.User.RequireUniqueEmail = true;
+            options.User.RequireUniqueEmail = false;
             options.Password.RequireDigit = false;
             options.Password.RequireLowercase = false;
             options.Password.RequireUppercase = false;

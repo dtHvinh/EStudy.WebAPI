@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
+using WebAPI.Constants;
 using WebAPI.Models;
 
 namespace WebAPI.Endpoints.AccountEndpoints.Register;
@@ -11,9 +12,10 @@ internal class Endpoint(UserManager<User> userManager)
 
     public override void Configure()
     {
-        Post("");
+        Post("register");
         AllowAnonymous();
         Group<AccountGroup>();
+        Description(d => d.WithName("RegisterAccount").WithDescription("Register a new account"));
     }
 
     public override async Task HandleAsync(RegisterRequest req, CancellationToken ct)
@@ -23,7 +25,7 @@ internal class Endpoint(UserManager<User> userManager)
         var createUserResult = await _userManager.CreateAsync(newUser, req.Password);
 
         if (!createUserResult.Succeeded)
-            ThrowError("Failed to create user");
+            ThrowError(createUserResult.Errors.FirstOrDefault()?.Description ?? "Failed to create user");
 
         var addRoleResult = await _userManager.AddToRoleAsync(newUser, R.Student);
 

@@ -23,10 +23,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<StudySchedule> StudySchedules { get; set; } = default!;
     public DbSet<StudyActivity> StudyActivities { get; set; } = default!;
     public DbSet<StudyTopic> StudyTopics { get; set; } = default!;
+    public DbSet<Resource> Resources { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Ignore<IdentityUserLogin<int>>();
+        builder.Ignore<IdentityUserToken<int>>();
+        builder.Ignore<IdentityUserLogin<int>>();
+        builder.Ignore<IdentityRoleClaim<int>>();
+        builder.Ignore<IdentityUserClaim<int>>();
 
         builder.Entity<User>()
             .ToTable("Users")
@@ -37,12 +44,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .Ignore(e => e.PhoneNumberConfirmed)
             .Ignore(e => e.EmailConfirmed)
             .Ignore(e => e.AccessFailedCount);
-
-        builder.Ignore<IdentityUserLogin<int>>();
-        builder.Ignore<IdentityUserToken<int>>();
-        builder.Ignore<IdentityUserLogin<int>>();
-        builder.Ignore<IdentityRoleClaim<int>>();
-        builder.Ignore<IdentityUserClaim<int>>();
 
         builder.Entity<IdentityUserRole<int>>()
             .ToTable("UserRoles");

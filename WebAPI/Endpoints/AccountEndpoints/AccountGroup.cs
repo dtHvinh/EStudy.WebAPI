@@ -2,11 +2,11 @@
 
 namespace WebAPI.Endpoints.AccountEndpoints;
 
-public class AccountGroup : Group
+public sealed class AccountGroup : Group
 {
     public AccountGroup()
     {
-        Configure("account", cf =>
+        Configure("account", ep =>
         {
         });
     }
