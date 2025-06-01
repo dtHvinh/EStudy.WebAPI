@@ -1,4 +1,6 @@
-﻿namespace WebAPI.Utilities.Extensions;
+﻿using WebAPI.Models.Contract;
+
+namespace WebAPI.Utilities.Extensions;
 
 public static class ObjectExtensions
 {
@@ -11,4 +13,6 @@ public static class ObjectExtensions
     /// Ensures return the value will be in the given range
     /// </summary>
     public static int EnsureInRange(this int current, int min, int max) => Math.Clamp(current, min, max);
+
+    public static bool IsBelongTo(this IBelongToUser<int> entity, string userId) => entity.AuthorId == int.Parse(userId);
 }
