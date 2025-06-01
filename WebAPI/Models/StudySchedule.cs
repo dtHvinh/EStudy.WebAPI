@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using WebAPI.Models.Contract;
 
 namespace WebAPI.Models;
 
 [Table("StudySchedules")]
-public class StudySchedule
+public class StudySchedule : IBelongToUser<int>
 {
     public int Id { get; set; }
     public required string Name { get; set; }
@@ -15,9 +16,9 @@ public class StudySchedule
 
     public DateTimeOffset? StartDate { get; set; }
 
-    [ForeignKey(nameof(User))]
-    public int UserId { get; set; }
-    public User User { get; set; } = default!;
+    [ForeignKey(nameof(Author))]
+    public int AuthorId { get; set; }
+    public User Author { get; set; } = default!;
 
     public ICollection<StudyActivity> Activities { get; set; } = default!;
 }

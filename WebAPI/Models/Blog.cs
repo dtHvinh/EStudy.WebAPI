@@ -4,7 +4,7 @@ using WebAPI.Models.Contract;
 namespace WebAPI.Models;
 
 [Table("Blogs")]
-public class Blog : IEntityWithTime<int>
+public class Blog : IEntityWithTime<int>, IBelongToUser<int>
 {
     public int Id { get; set; }
     public required string Title { get; set; }

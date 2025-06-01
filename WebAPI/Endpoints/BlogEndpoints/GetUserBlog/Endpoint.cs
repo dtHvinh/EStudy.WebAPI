@@ -38,7 +38,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
             .OrderByDescending(b => b.CreationDate)
             .Skip(skip)
             .Take(req.PageSize)
-            .Select(b => b.ToBlogResponse())
+            .ProjectToResponse()
             .ToListAsync(ct);
 
         var response = blogs.ToPagedResponse(req.Page, req.PageSize, totalCount);
