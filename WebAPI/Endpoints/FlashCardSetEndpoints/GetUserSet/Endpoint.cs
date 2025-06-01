@@ -1,23 +1,23 @@
-using FastEndpoints;
+﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Utilities.Extensions;
 using WebAPI.Utilities.Pagination;
 
-namespace WebAPI.Endpoints.BlogEndpoints.GetUserBlog;
+namespace WebAPI.Endpoints.FlashCardSetEndpoints.GetUserSet;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogRequest, PagedResponse<BlogResponse>>
+public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserSetRequest, PagedResponse<FlashCardSetResponse>>
 {
     private readonly ApplicationDbContext _context = context;
 
     public override void Configure()
     {
         Get("mine");
-        Group<BlogGroup>();
-        Description(d => d.WithName("GetUserBlogs").WithDescription("Gets the current user's blogs with pagination"));
+        Group<FlashCardSetGroup>();
+        Description(d => d.WithName("GetUserFlashCardSet").WithDescription("Gets the current user's flashcard sets with pagination"));
     }
 
-    public override async Task HandleAsync(GetUserBlogRequest req, CancellationToken ct)
+    public override async Task HandleAsync(GetUserSetRequest req, CancellationToken ct)
     {
         var userId = this.RetrieveUserId();
 
@@ -27,22 +27,23 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
             return;
         }
 
-        var totalCount = await _context.Blogs
+        var totalCount = await _context.FlashCardSets
             .Where(b => b.AuthorId == authorId)
             .CountAsync(ct);
 
         var skip = (req.Page.EnsureLargerOrEqual(1) - 1) * req.PageSize.EnsureInRange(1, 50);
 
-        var blogs = await _context.Blogs
+        var flashCardSets = await _context.FlashCardSets
+            .OrderBy(b => b.Id)
             .Where(b => b.AuthorId == authorId)
-            .OrderByDescending(b => b.CreationDate)
             .Skip(skip)
             .Take(req.PageSize)
             .ProjectToResponse()
             .ToListAsync(ct);
 
-        var response = blogs.ToPagedResponse(req.Page, req.PageSize, totalCount);
+        var response = flashCardSets.ToPagedResponse(req.Page, req.PageSize, totalCount);
 
         await SendAsync(response, cancellation: ct);
+
     }
 }
