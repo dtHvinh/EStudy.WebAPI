@@ -1,8 +1,9 @@
 ﻿using FastEndpoints;
 using WebAPI.Data;
+using WebAPI.Endpoints.FlashCardSetEndpoints.Create;
 using WebAPI.Utilities.Extensions;
 
-namespace WebAPI.Endpoints.FlashCardSetEndpoints.Create;
+namespace WebAPI.Endpoints.FlashCardSetEndpoints.CreateSet;
 
 public class Endpoint(ApplicationDbContext context) : Endpoint<CreateFlashCardSetRequest, CreateFlashCardSetResponse>
 {
