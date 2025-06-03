@@ -18,6 +18,8 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCardInSetReque
 
     public override async Task HandleAsync(GetCardInSetRequest req, CancellationToken ct)
     {
+        var shouldShuffle = Query<bool>("shuffle", false);
+
         // The card in set seem not that security critical to check if the user is the author of the set
         // so skip the check.
         var cardSet = await _context.FlashCardSets
@@ -32,6 +34,11 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCardInSetReque
         var query = _context.Entry(cardSet)
             .Collection(e => e.FlashCards)
             .Query();
+
+        if (shouldShuffle)
+        {
+            query = query.OrderBy(e => Guid.NewGuid());
+        }
 
         var totalCount = await query.CountAsync(ct);
 
