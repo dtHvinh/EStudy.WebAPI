@@ -1,6 +1,6 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
-using WebAPI.Models;
+using WebAPI.Models._others;
 using WebAPI.Services;
 
 namespace WebAPI.Endpoints.AccountEndpoints.Login;

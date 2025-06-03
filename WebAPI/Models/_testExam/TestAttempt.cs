@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using WebAPI.Models._others;
 using WebAPI.Models.Contract;
 
-namespace WebAPI.Models;
+namespace WebAPI.Models._testExam;
 
 [Table("TestAttempts")]
 public class TestAttempt : IEntityWithTime<int>

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using WebAPI.Models._others;
 
-namespace WebAPI.Models;
+namespace WebAPI.Models._course;
 
 [Table("CourseEnrollments")]
 public class CourseEnrollment

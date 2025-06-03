@@ -2,7 +2,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WebAPI.Models;
+using WebAPI.Models._others;
 using WebAPI.Utilities.Attributes;
 
 namespace WebAPI.Services;

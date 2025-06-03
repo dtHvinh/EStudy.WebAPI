@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models.Contract;
 
-namespace WebAPI.Models;
+namespace WebAPI.Models._others;
 
 [Table("Blogs")]
 public class Blog : IEntityWithTime<int>, IBelongToUser<int>

@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
 using WebAPI.Constants;
-using WebAPI.Models;
+using WebAPI.Models._others;
 
 namespace WebAPI.Endpoints.AccountEndpoints.Register;
 

@@ -1,5 +1,5 @@
 using Riok.Mapperly.Abstractions;
-using WebAPI.Models;
+using WebAPI.Models._others;
 
 namespace WebAPI.Endpoints.BlogEndpoints.GetUserBlog;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebAPI.Models;
+namespace WebAPI.Models._testExam;
 
 [Table("Answers")]
 public class Answer

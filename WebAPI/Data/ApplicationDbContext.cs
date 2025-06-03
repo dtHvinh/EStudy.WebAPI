@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Models;
+using WebAPI.Models._classRoom;
+using WebAPI.Models._course;
+using WebAPI.Models._others;
+using WebAPI.Models._schedule;
+using WebAPI.Models._testExam;
 
 namespace WebAPI.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, int>(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<User, Role, int>(options)
 {
     public DbSet<Answer> Answers { get; set; } = default!;
     public DbSet<Question> Questions { get; set; } = default!;
@@ -19,11 +24,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TestAnswerSellection> TestAnswerSellections { get; set; } = default!;
     public DbSet<TestAttempt> TestAttempts { get; set; } = default!;
     public DbSet<TestExam> TestExams { get; set; } = default!;
-    public DbSet<VoiceCallSession> VoiceCallSessions { get; set; } = default!;
     public DbSet<StudySchedule> StudySchedules { get; set; } = default!;
     public DbSet<StudyActivity> StudyActivities { get; set; } = default!;
     public DbSet<StudyTopic> StudyTopics { get; set; } = default!;
     public DbSet<Resource> Resources { get; set; } = default!;
+    public DbSet<Classroom> Classrooms { get; set; } = default!;
+    public DbSet<ClassroomEnrollment> ClassroomEnrollments { get; set; } = default!;
+    public DbSet<Assignment> Assignments { get; set; } = default!;
+    public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; } = default!;
+    public DbSet<AssignmentSubmission> AssignmentSubmissions { get; set; } = default!;
+    public DbSet<SubmissionAttachment> SubmissionAttachments { get; set; } = default!;
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

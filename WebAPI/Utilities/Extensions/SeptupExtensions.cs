@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Data;
-using WebAPI.Models;
+using WebAPI.Models._others;
 
 namespace WebAPI.Utilities.Extensions;
 
