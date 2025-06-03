@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebAPI.Models._others;
+namespace WebAPI.Models._achivement;
 
 [Table("Medals")]
 public class Medal
