@@ -5,7 +5,7 @@ using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.AddCard;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest>
+public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest, AddCardResponse>
 {
     private readonly ApplicationDbContext _context = context;
 
@@ -33,7 +33,10 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest>
         _context.FlashCards.Add(newFlashCard);
 
         if (await _context.SaveChangesAsync(ct) > 0)
-            await SendOkAsync(ct);
+            await SendOkAsync(new AddCardResponse
+            {
+                Id = newFlashCard.Id
+            }, ct);
 
         ThrowError("Unable to add flash card to set");
     }

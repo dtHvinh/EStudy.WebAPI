@@ -6,3 +6,8 @@ public sealed class AddCardRequest
     public string Front { get; set; } = default!;
     public string Back { get; set; } = default!;
 }
+
+public sealed class AddCardResponse
+{
+    public int Id { get; set; }
+}

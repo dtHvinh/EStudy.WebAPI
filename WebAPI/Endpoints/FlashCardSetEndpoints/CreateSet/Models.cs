@@ -1,11 +1,12 @@
 ﻿using FastEndpoints;
 using FluentValidation;
 
-namespace WebAPI.Endpoints.FlashCardSetEndpoints.Create;
+namespace WebAPI.Endpoints.FlashCardSetEndpoints.CreateSet;
 
 public sealed class CreateFlashCardSetRequest
 {
     public string Title { get; set; } = default!;
+    public string Description { get; set; } = default!;
 
     public sealed class Validator : Validator<CreateFlashCardSetRequest>
     {

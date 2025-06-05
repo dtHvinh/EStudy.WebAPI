@@ -74,7 +74,9 @@ public static class SeptupExtensions
                                policy =>
                                {
                                    policy.WithOrigins(
-                                       "http://localhost:7285");
+                                       "http://localhost:7285",
+                                       "http://localhost:3000"
+                                       );
                                    policy.AllowAnyHeader();
                                    policy.AllowAnyMethod();
                                    policy.AllowCredentials();

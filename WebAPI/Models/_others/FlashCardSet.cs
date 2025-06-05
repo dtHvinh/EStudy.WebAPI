@@ -8,6 +8,7 @@ public class FlashCardSet : IBelongToUser<int>
 {
     public int Id { get; set; }
     public required string Title { get; set; }
+    public string? Description { get; set; }
 
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }
