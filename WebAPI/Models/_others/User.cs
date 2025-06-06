@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models._classRoom;
 using WebAPI.Models._course;
+using WebAPI.Models._flashCard;
 using WebAPI.Models._schedule;
 
 namespace WebAPI.Models._others;

@@ -34,8 +34,10 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserSetRequest
         var skip = (req.Page.EnsureLargerOrEqual(1) - 1) * req.PageSize.EnsureInRange(1, 50);
 
         var flashCardSets = await _context.FlashCardSets
-            .OrderBy(b => b.Id)
+            .OrderBy(b => b.IsFavorite)
+            .ThenByDescending(b => b.Id)
             .Where(b => b.AuthorId == authorId)
+            .Include(b => b.FlashCards)
             .Skip(skip)
             .Take(req.PageSize)
             .ProjectToResponse()

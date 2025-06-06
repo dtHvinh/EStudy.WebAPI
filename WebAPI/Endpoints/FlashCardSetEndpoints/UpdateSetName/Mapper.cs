@@ -1,5 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
-using WebAPI.Models._others;
+using WebAPI.Models._flashCard;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.UpdateSetName;
 

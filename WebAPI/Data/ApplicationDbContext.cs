@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models._classRoom;
 using WebAPI.Models._course;
+using WebAPI.Models._flashCard;
 using WebAPI.Models._others;
 using WebAPI.Models._schedule;
 using WebAPI.Models._testExam;
