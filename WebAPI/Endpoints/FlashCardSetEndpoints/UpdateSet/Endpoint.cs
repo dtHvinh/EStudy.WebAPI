@@ -1,21 +1,22 @@
 ﻿using FastEndpoints;
 using WebAPI.Data;
+using WebAPI.Endpoints.FlashCardSetEndpoints.UpdateSetName;
 using WebAPI.Utilities.Extensions;
 
-namespace WebAPI.Endpoints.FlashCardSetEndpoints.UpdateSetName;
+namespace WebAPI.Endpoints.FlashCardSetEndpoints.UpdateSet;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateSetNameRequest>
+public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateSetRequest>
 {
     private readonly ApplicationDbContext _context = context;
 
     public override void Configure()
     {
-        Patch("/{id}/name");
+        Put("/{id}");
         Group<FlashCardSetGroup>();
-        Description(d => d.WithName("UpdateFlashCardSetName").WithDescription("Update the current user's flashcard sets name"));
+        Description(d => d.WithName("UpdateFlashCardSet").WithDescription("Update the current user's flashcard sets"));
     }
 
-    public override async Task HandleAsync(UpdateSetNameRequest req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateSetRequest req, CancellationToken ct)
     {
         var userId = this.RetrieveUserId();
 
@@ -33,7 +34,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateSetNameRequ
             return;
         }
 
-        flashCardSet.UpdateSetName(req);
+        flashCardSet.UpdateSet(req);
 
         if (await _context.SaveChangesAsync(ct) == 1)
         {
@@ -41,7 +42,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateSetNameRequ
         }
         else
         {
-            ThrowError("Unable to update flash card set name");
+            ThrowError("Unable to update flash card set");
         }
     }
 }

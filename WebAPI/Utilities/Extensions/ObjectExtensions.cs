@@ -15,4 +15,9 @@ public static class ObjectExtensions
     public static int EnsureInRange(this int current, int min, int max) => Math.Clamp(current, min, max);
 
     public static bool IsBelongTo(this IBelongToUser<int> entity, string userId) => entity.AuthorId == int.Parse(userId);
+
+    /// <summary>
+    /// Either nothing or short than given length
+    /// </summary>
+    public static bool NothingOrShortThan(this string value, int max) => string.IsNullOrEmpty(value) || value.Length <= max;
 }
