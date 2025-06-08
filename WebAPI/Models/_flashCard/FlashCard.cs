@@ -6,8 +6,8 @@ namespace WebAPI.Models._flashCard;
 public class FlashCard
 {
     public int Id { get; set; }
-    public required string Front { get; set; }
-    public required string Back { get; set; }
+    public required string Term { get; set; }
+    public required string Definition { get; set; }
 
     [ForeignKey(nameof(FlashCard))]
     public int FlashCardSetId { get; set; }

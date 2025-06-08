@@ -3,8 +3,8 @@
 public sealed class AddCardRequest
 {
     public int SetId { get; set; }
-    public string Front { get; set; } = default!;
-    public string Back { get; set; } = default!;
+    public string Term { get; set; } = default!;
+    public string Definition { get; set; } = default!;
 }
 
 public sealed class AddCardResponse

@@ -1,7 +1,6 @@
 ﻿using FastEndpoints;
 using WebAPI.Data;
 using WebAPI.Endpoints.FlashCardSetEndpoints.UpdateSetName;
-using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.UpdateSet;
 
@@ -18,14 +17,6 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateSetRequest>
 
     public override async Task HandleAsync(UpdateSetRequest req, CancellationToken ct)
     {
-        var userId = this.RetrieveUserId();
-
-        if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out var _))
-        {
-            ThrowError("User not authenticated or invalid user ID");
-            return;
-        }
-
         var flashCardSet = await _context.FlashCardSets.FindAsync([req.Id], ct);
 
         if (flashCardSet == null)

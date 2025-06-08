@@ -10,6 +10,6 @@ public sealed class GetCardInSetRequest : PaginationParams
 public sealed class FlashCardResponse
 {
     public int Id { get; set; }
-    public string Front { get; set; } = default!;
-    public string Back { get; set; } = default!;
+    public string Term { get; set; } = default!;
+    public string Definition { get; set; } = default!;
 }
