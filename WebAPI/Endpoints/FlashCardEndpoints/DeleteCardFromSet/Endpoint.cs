@@ -1,7 +1,9 @@
 ﻿using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Utilities.Extensions;
 
-namespace WebAPI.Endpoints.FlashCardSetEndpoints.DeleteCardFromSet;
+namespace WebAPI.Endpoints.FlashCardEndpoints.DeleteCardFromSet;
 
 public class Endpoint(ApplicationDbContext context) : Endpoint<DeleteCardFromSetRequest>
 {
@@ -9,18 +11,20 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<DeleteCardFromSet
 
     public override void Configure()
     {
-        Delete("/{setId}/remove/{cardId}");
-        Group<FlashCardSetGroup>();
+        Delete("{cardId}/from-set/{setId}");
+        Group<FlashCardGroup>();
     }
 
     public override async Task HandleAsync(DeleteCardFromSetRequest req, CancellationToken ct)
     {
-        var set = await _context.FlashCardSets.FindAsync([req.SetId], ct);
-
+        var set = await _context.FlashCardSets.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == req.SetId, ct);
         if (set is null)
         {
             ThrowError("Set not found");
-            return;
+        }
+        else if (!set.IsBelongTo(this.RetrieveUserId()))
+        {
+            ThrowError("You are not the author of this set");
         }
 
         var card = await _context.FlashCards.FindAsync([req.CardId], ct);
@@ -31,7 +35,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<DeleteCardFromSet
             return;
         }
 
-        set.FlashCards.Remove(card);
+        _context.FlashCards.Remove(card);
 
         if (await _context.SaveChangesAsync(ct) == 1)
         {

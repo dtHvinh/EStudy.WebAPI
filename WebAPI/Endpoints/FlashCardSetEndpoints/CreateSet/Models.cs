@@ -1,6 +1,5 @@
 ﻿using FastEndpoints;
 using FluentValidation;
-using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.CreateSet;
 
@@ -14,11 +13,10 @@ public sealed class CreateFlashCardSetRequest
         public Validator()
         {
             RuleFor(x => x.Title).NotEmpty().WithMessage("Flash card set name is required")
-                .MaximumLength(20).WithMessage("Flash card set name is too long");
+                .MaximumLength(50).WithMessage("Flash card set name is too long");
 
             RuleFor(x => x.Description)
-                .Must(x => x.NothingOrShortThan(100))
-                .WithMessage("Flash card set description is too long");
+                .NotEmpty().WithMessage("Flash card set description is required");
         }
     }
 }

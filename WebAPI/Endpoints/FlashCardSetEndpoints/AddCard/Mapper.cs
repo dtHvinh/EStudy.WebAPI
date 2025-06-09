@@ -7,4 +7,6 @@ namespace WebAPI.Endpoints.FlashCardSetEndpoints.AddCard;
 public static partial class Mapper
 {
     public static partial FlashCard ToFlashCard(this AddCardRequest request, int flashCardSetId);
+    public static partial AddCardResponse ToResponse(this FlashCard card);
+
 }

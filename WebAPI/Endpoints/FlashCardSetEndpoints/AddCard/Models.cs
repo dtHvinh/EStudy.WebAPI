@@ -10,4 +10,6 @@ public sealed class AddCardRequest
 public sealed class AddCardResponse
 {
     public int Id { get; set; }
+    public string Term { get; set; } = default!;
+    public string Definition { get; set; } = default!;
 }

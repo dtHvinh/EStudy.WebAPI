@@ -5,9 +5,10 @@ using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.CreateSet;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<CreateFlashCardSetRequest, CreateFlashCardSetResponse>
+public class Endpoint(ApplicationDbContext context, Serilog.ILogger logger) : Endpoint<CreateFlashCardSetRequest, CreateFlashCardSetResponse>
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly Serilog.ILogger _logger = logger;
 
     public override void Configure()
     {
@@ -25,6 +26,8 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<CreateFlashCardSe
             await SendOkAsync(newFlashCardSet.ToResponse(), ct);
 
         else
+        {
             ThrowError("Failed to create flash card set");
+        }
     }
 }

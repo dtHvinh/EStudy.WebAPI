@@ -33,11 +33,8 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest, A
         _context.FlashCards.Add(newFlashCard);
 
         if (await _context.SaveChangesAsync(ct) > 0)
-            await SendOkAsync(new AddCardResponse
-            {
-                Id = newFlashCard.Id
-            }, ct);
-
-        ThrowError("Unable to add flash card to set");
+            await SendOkAsync(newFlashCard.ToResponse(), ct);
+        else
+            ThrowError("Unable to add flash card to set");
     }
 }
