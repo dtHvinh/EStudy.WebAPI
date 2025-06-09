@@ -1,9 +1,10 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Endpoints.FlashCardSetEndpoints.AddCard;
 using WebAPI.Utilities.Extensions;
 
-namespace WebAPI.Endpoints.FlashCardSetEndpoints.AddCard;
+namespace WebAPI.Endpoints.FlashCardEndpoints.AddCardToSet;
 
 public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest, AddCardResponse>
 {
@@ -11,8 +12,9 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest, A
 
     public override void Configure()
     {
-        Post("{setId}/add");
-        Group<FlashCardSetGroup>();
+        Post("add-to/{setId}");
+        AllowFileUploads();
+        Group<FlashCardGroup>();
     }
 
     public override async Task HandleAsync(AddCardRequest req, CancellationToken ct)
