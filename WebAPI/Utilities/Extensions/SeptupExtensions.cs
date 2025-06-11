@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.Data;
 using WebAPI.Models._others;
+using WebAPI.Services;
 
 namespace WebAPI.Utilities.Extensions;
 
@@ -90,6 +91,18 @@ public static class SeptupExtensions
     {
         // Register services using the attribute-based approach
         services.AddServicesFromAssembly(typeof(SeptupExtensions).Assembly);
+
+        services.AddSingleton(cf =>
+        {
+            var supabaseKey = Config["Supabase:Key"]
+            ?? throw new InvalidOperationException("Supabase Key must be configured");
+            var supabaseUrl = Config["Supabase:Url"]
+            ?? throw new InvalidOperationException("Supabase Url must be configured");
+
+            var storage = new FileService(supabaseUrl, supabaseKey);
+            storage.InitializeAsync();
+            return storage;
+        });
 
         return services;
     }

@@ -2,13 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Endpoints.FlashCardSetEndpoints.AddCard;
+using WebAPI.Services;
 using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardEndpoints.AddCardToSet;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest, AddCardResponse>
+public class Endpoint(ApplicationDbContext context, FileService fileService) : Endpoint<AddCardRequest, AddCardResponse>
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly FileService _fileService = fileService;
 
     public override void Configure()
     {
@@ -31,6 +33,12 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<AddCardRequest, A
             await SendForbiddenAsync(ct);
 
         var newFlashCard = req.ToFlashCard(req.SetId);
+
+        if (req.Image is not null)
+        {
+            var imageUrl = await _fileService.UploadFlashCardImage(req.Image, ct);
+            newFlashCard.ImageUrl = imageUrl;
+        }
 
         _context.FlashCards.Add(newFlashCard);
 

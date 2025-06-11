@@ -1,13 +1,15 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Services;
 using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardEndpoints.DeleteCardFromSet;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<DeleteCardFromSetRequest>
+public class Endpoint(ApplicationDbContext context, FileService fileService) : Endpoint<DeleteCardFromSetRequest>
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly FileService _fileService = fileService;
 
     public override void Configure()
     {
@@ -36,6 +38,8 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<DeleteCardFromSet
         }
 
         _context.FlashCards.Remove(card);
+        if (!string.IsNullOrEmpty(card.ImageUrl))
+            await _fileService.DeleteFlashCardImage(card.ImageUrl);
 
         if (await _context.SaveChangesAsync(ct) == 1)
         {

@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9e32265f-5f33-438f-a563-6f7245a3da29</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,11 @@
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Storage\Storage.csproj" />
+    <ProjectReference Include="..\WebCrawler\WebCrawler.csproj" />
   </ItemGroup>
 
 </Project>
