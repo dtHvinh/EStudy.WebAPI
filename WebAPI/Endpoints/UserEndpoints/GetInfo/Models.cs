@@ -6,4 +6,5 @@ public sealed record UserResponse
     public string Name { get; init; } = default!;
     public string? Email { get; init; }
     public string? PhoneNumber { get; init; }
+    public string? ProfilePicture { get; init; }
 }

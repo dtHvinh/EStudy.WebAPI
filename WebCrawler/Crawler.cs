@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
 
-namespace WebCrawler;
+namespace WebAPI.WebCrawler;
 
 public class Crawler
 {

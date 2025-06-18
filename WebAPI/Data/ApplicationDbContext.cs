@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Models._classRoom;
 using WebAPI.Models._course;
 using WebAPI.Models._flashCard;
 using WebAPI.Models._others;
-using WebAPI.Models._schedule;
 using WebAPI.Models._testExam;
 
 namespace WebAPI.Data;
@@ -25,17 +23,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TestAnswerSellection> TestAnswerSellections { get; set; } = default!;
     public DbSet<TestAttempt> TestAttempts { get; set; } = default!;
     public DbSet<TestExam> TestExams { get; set; } = default!;
-    public DbSet<StudySchedule> StudySchedules { get; set; } = default!;
-    public DbSet<StudyActivity> StudyActivities { get; set; } = default!;
-    public DbSet<StudyTopic> StudyTopics { get; set; } = default!;
     public DbSet<Resource> Resources { get; set; } = default!;
-    public DbSet<Classroom> Classrooms { get; set; } = default!;
-    public DbSet<ClassroomEnrollment> ClassroomEnrollments { get; set; } = default!;
-    public DbSet<Assignment> Assignments { get; set; } = default!;
-    public DbSet<AssignmentAttachment> AssignmentAttachments { get; set; } = default!;
-    public DbSet<AssignmentSubmission> AssignmentSubmissions { get; set; } = default!;
-    public DbSet<SubmissionAttachment> SubmissionAttachments { get; set; } = default!;
-
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -67,5 +55,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 new Role { Id = 2, Name = "Student", NormalizedName = "STUDENT" },
                 new Role { Id = 3, Name = "Instructor", NormalizedName = "INSTRUCTOR" }
             ]);
+
+        builder.Entity<FlashCard>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",  // Text search config
+                p => new { p.Term, p.Definition, p.PartOfSpeech })  // Included properties
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
     }
 }

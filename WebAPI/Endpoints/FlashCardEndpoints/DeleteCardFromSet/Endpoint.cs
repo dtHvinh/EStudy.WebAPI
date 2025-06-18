@@ -13,23 +13,13 @@ public class Endpoint(ApplicationDbContext context, FileService fileService) : E
 
     public override void Configure()
     {
-        Delete("{cardId}/from-set/{setId}");
+        Delete("{cardId}");
         Group<FlashCardGroup>();
     }
 
     public override async Task HandleAsync(DeleteCardFromSetRequest req, CancellationToken ct)
     {
-        var set = await _context.FlashCardSets.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == req.SetId, ct);
-        if (set is null)
-        {
-            ThrowError("Set not found");
-        }
-        else if (!set.IsBelongTo(this.RetrieveUserId()))
-        {
-            ThrowError("You are not the author of this set");
-        }
-
-        var card = await _context.FlashCards.FindAsync([req.CardId], ct);
+        var card = await _context.FlashCards.Include(e => e.FlashCardSet).ThenInclude(e => e.Author).FirstOrDefaultAsync(e => e.Id == req.CardId, ct);
 
         if (card is null)
         {
@@ -37,9 +27,14 @@ public class Endpoint(ApplicationDbContext context, FileService fileService) : E
             return;
         }
 
+        if (!card.FlashCardSet.IsBelongTo(this.RetrieveUserId()))
+        {
+            ThrowError("You are not the author of this set");
+        }
+
         _context.FlashCards.Remove(card);
         if (!string.IsNullOrEmpty(card.ImageUrl))
-            await _fileService.DeleteFlashCardImage(card.ImageUrl);
+            await _fileService.DeleteFlashCardImage(card.ImageUrl, ct);
 
         if (await _context.SaveChangesAsync(ct) == 1)
         {

@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.GetSetInfo;
@@ -15,13 +16,17 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetSetInfoRequest
 
     public override async Task HandleAsync(GetSetInfoRequest req, CancellationToken ct)
     {
-        var set = await _context.FlashCardSets.FindAsync([req.SetId], ct);
+        var set = await _context.FlashCardSets
+            .Include(e => e.FlashCards)
+            .ProjectInfoResponse()
+            .FirstOrDefaultAsync(e => e.Id == req.SetId, ct);
+
         if (set is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
 
-        await SendOkAsync(set.ToInfoResponse(), ct);
+        await SendOkAsync(set, ct);
     }
 }

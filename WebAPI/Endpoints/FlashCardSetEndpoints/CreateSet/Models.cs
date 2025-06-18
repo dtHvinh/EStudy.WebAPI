@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using FluentValidation;
+using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.CreateSet;
 
@@ -16,7 +17,7 @@ public sealed class CreateFlashCardSetRequest
                 .MaximumLength(50).WithMessage("Flash card set name is too long");
 
             RuleFor(x => x.Description)
-                .NotEmpty().WithMessage("Flash card set description is required");
+                .Must(e => e.NothingOrShortThan(100)).WithMessage("Flash card set description can be up to 100 characters");
         }
     }
 }
@@ -25,4 +26,5 @@ public sealed class CreateFlashCardSetResponse
 {
     public int Id { get; set; }
     public string Title { get; set; } = default!;
+    public string? Description { get; set; } = default!;
 }

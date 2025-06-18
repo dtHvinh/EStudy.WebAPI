@@ -21,15 +21,16 @@ internal class Endpoint(UserManager<User> userManager, IJwtService jwtService)
 
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
-        var user = await _userManager.FindByNameAsync(req.UserName);
+        var user = await _userManager.FindByNameAsync(req.UserNameOrEmail)
+            ?? await _userManager.FindByEmailAsync(req.UserNameOrEmail);
 
         if (user == null)
-            ThrowError("Invalid username or password");
+            ThrowError("Invalid username or email");
 
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, req.Password);
 
         if (!isPasswordValid)
-            ThrowError("Invalid username or password");
+            ThrowError("Password is incorrect");
 
         var token = _jwtService.GenerateToken(user);
 

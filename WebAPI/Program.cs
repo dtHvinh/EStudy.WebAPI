@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Serilog;
+using System.Reflection;
 using System.Text.Json;
 using WebAPI.Utilities.Extensions;
 
@@ -15,7 +16,11 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 SeptupExtensions.Config = builder.Configuration;
 
 builder.Services.AddOpenApi();
-builder.Services.AddFastEndpoints();
+builder.Services.AddClients();
+builder.Services.AddFastEndpoints(cf =>
+{
+    cf.Filter = e => e.GetCustomAttribute<ObsoleteAttribute>() is null;
+});
 
 builder.Services.ConfigureCors();
 builder.Services.ConfigureDatabase();

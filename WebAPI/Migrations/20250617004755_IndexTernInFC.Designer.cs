@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250617004755_IndexTernInFC")]
+    partial class IndexTernInFC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,187 @@ namespace WebAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassroomId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("DueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.ToTable("Assignments");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.AssignmentAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.ToTable("AssignmentAttachments");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.AssignmentSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("Grade")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("IsSubmitted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TeacherFeedback")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("AssignmentSubmissions");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.Classroom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("JoinCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Classrooms");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.ClassroomEnrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClassroomId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("JoinDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ClassroomEnrollments");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.SubmissionAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SubmissionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubmissionId");
+
+                    b.ToTable("SubmissionAttachments");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.Chapter", b =>
@@ -171,9 +355,6 @@ namespace WebAPI.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsSkipped")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Note")
                         .HasColumnType("text");
 
@@ -224,6 +405,9 @@ namespace WebAPI.Migrations
 
                     b.Property<DateTimeOffset?>("LastAccess")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("Progress")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -371,9 +555,6 @@ namespace WebAPI.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("text");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -391,6 +572,118 @@ namespace WebAPI.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudyActivity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ResourceUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ScheduleId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("ScheduledTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("StudyActivities");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudySchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EstimatedWeek")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProficiencyGoal")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("WeeklyTargetMinutes")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("StudySchedules");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudyTopic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LanguageCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudyTopics");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.Answer", b =>
@@ -537,6 +830,88 @@ namespace WebAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebAPI.Models._classRoom.Assignment", b =>
+                {
+                    b.HasOne("WebAPI.Models._classRoom.Classroom", "Classroom")
+                        .WithMany("Assignments")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.AssignmentAttachment", b =>
+                {
+                    b.HasOne("WebAPI.Models._classRoom.Assignment", "Assignment")
+                        .WithMany("Attachments")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.AssignmentSubmission", b =>
+                {
+                    b.HasOne("WebAPI.Models._classRoom.Assignment", "Assignment")
+                        .WithMany("Submissions")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebAPI.Models._others.User", "Student")
+                        .WithMany("AssignmentSubmissions")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.Classroom", b =>
+                {
+                    b.HasOne("WebAPI.Models._others.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.ClassroomEnrollment", b =>
+                {
+                    b.HasOne("WebAPI.Models._classRoom.Classroom", "Classroom")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebAPI.Models._others.User", "Student")
+                        .WithMany("ClassroomEnrollments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classroom");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.SubmissionAttachment", b =>
+                {
+                    b.HasOne("WebAPI.Models._classRoom.AssignmentSubmission", "Submission")
+                        .WithMany("Attachments")
+                        .HasForeignKey("SubmissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Submission");
+                });
+
             modelBuilder.Entity("WebAPI.Models._course.Chapter", b =>
                 {
                     b.HasOne("WebAPI.Models._course.Course", "Course")
@@ -615,6 +990,36 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebAPI.Models._others.User", "Author")
                         .WithMany("Blogs")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudyActivity", b =>
+                {
+                    b.HasOne("WebAPI.Models._schedule.StudySchedule", "Schedule")
+                        .WithMany("Activities")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebAPI.Models._schedule.StudyTopic", "Topic")
+                        .WithMany("Activities")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Schedule");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudySchedule", b =>
+                {
+                    b.HasOne("WebAPI.Models._others.User", "Author")
+                        .WithMany("StudySchedules")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -701,6 +1106,25 @@ namespace WebAPI.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("WebAPI.Models._classRoom.Assignment", b =>
+                {
+                    b.Navigation("Attachments");
+
+                    b.Navigation("Submissions");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.AssignmentSubmission", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._classRoom.Classroom", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Enrollments");
+                });
+
             modelBuilder.Entity("WebAPI.Models._course.Chapter", b =>
                 {
                     b.Navigation("Lessons");
@@ -720,11 +1144,27 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models._others.User", b =>
                 {
+                    b.Navigation("AssignmentSubmissions");
+
                     b.Navigation("Blogs");
+
+                    b.Navigation("ClassroomEnrollments");
 
                     b.Navigation("Enrollments");
 
                     b.Navigation("FlashCardSets");
+
+                    b.Navigation("StudySchedules");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudySchedule", b =>
+                {
+                    b.Navigation("Activities");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._schedule.StudyTopic", b =>
+                {
+                    b.Navigation("Activities");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.Question", b =>

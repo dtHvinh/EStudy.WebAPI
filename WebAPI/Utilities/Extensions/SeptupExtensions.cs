@@ -12,6 +12,13 @@ public static class SeptupExtensions
 {
     public static IConfiguration Config { get; set; } = default!;
 
+    public static IServiceCollection AddClients(this IServiceCollection services)
+    {
+        services.AddHttpClient("GoogleClient", client => client.BaseAddress = new Uri("https://www.googleapis.com"));
+
+        return services;
+    }
+
     public static IServiceCollection ConfigureDatabase(this IServiceCollection services)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -76,7 +83,8 @@ public static class SeptupExtensions
                                {
                                    policy.WithOrigins(
                                        "http://localhost:7285",
-                                       "http://localhost:3000"
+                                       "http://localhost:3000",
+                                       "https://stunning-full-heron.ngrok-free.app"
                                        );
                                    policy.AllowAnyHeader();
                                    policy.AllowAnyMethod();

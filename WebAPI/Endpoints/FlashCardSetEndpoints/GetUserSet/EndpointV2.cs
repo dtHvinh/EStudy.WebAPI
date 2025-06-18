@@ -2,11 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Utilities.Extensions;
-using WebAPI.Utilities.Pagination;
 
 namespace WebAPI.Endpoints.FlashCardSetEndpoints.GetUserSet;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserSetRequest, PagedResponse<FlashCardSetResponse>>
+public class EndpointV2(ApplicationDbContext context) : Endpoint<GetUserSetRequest, List<FlashCardSetResponse>>
 {
     private readonly ApplicationDbContext _context = context;
 
@@ -14,7 +13,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserSetRequest
     {
         Get("mine");
         Group<FlashCardSetGroup>();
-        Description(d => d.WithName("GetUserFlashCardSet").WithDescription("Gets the current user's flashcard sets with pagination"));
+        Description(d => d.WithName("GetUserFlashCardSet").WithDescription("Gets the current user's flashcard sets"));
     }
 
     public override async Task HandleAsync(GetUserSetRequest req, CancellationToken ct)
@@ -27,25 +26,17 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserSetRequest
             return;
         }
 
-        var totalCount = await _context.FlashCardSets
-            .Where(b => b.AuthorId == authorId)
-            .CountAsync(ct);
-
-        var skip = (req.Page.EnsureLargerOrEqual(1) - 1) * req.PageSize.EnsureInRange(1, 50);
+        var skip = (req.Page - 1) * req.PageSize;
 
         var flashCardSets = await _context.FlashCardSets
             .OrderByDescending(b => b.IsFavorite)
             .ThenByDescending(b => b.Id)
             .Where(b => b.AuthorId == authorId)
-            .Include(b => b.FlashCards)
             .Skip(skip)
             .Take(req.PageSize)
             .ProjectToResponse()
             .ToListAsync(ct);
 
-        var response = flashCardSets.ToPagedResponse(req.Page, req.PageSize, totalCount);
-
-        await SendAsync(response, cancellation: ct);
-
+        await SendAsync(flashCardSets, cancellation: ct);
     }
 }

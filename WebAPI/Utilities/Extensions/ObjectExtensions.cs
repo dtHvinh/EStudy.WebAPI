@@ -1,4 +1,6 @@
-﻿using WebAPI.Models.Contract;
+﻿using System.Collections.Specialized;
+using System.Web;
+using WebAPI.Models.Contract;
 
 namespace WebAPI.Utilities.Extensions;
 
@@ -20,4 +22,17 @@ public static class ObjectExtensions
     /// Either nothing or short than given length
     /// </summary>
     public static bool NothingOrShortThan(this string value, int max) => string.IsNullOrEmpty(value) || value.Length <= max;
+
+    public static string ToQueryString(this NameValueCollection nvc)
+    {
+        var array = (
+            from key in nvc.AllKeys
+            from value in nvc.GetValues(key) ?? []
+            select string.Format(
+            "{0}={1}",
+            HttpUtility.UrlEncode(key),
+            HttpUtility.UrlEncode(value))
+            ).ToArray();
+        return "?" + string.Join("&", array);
+    }
 }

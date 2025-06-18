@@ -12,12 +12,10 @@ public class FlashCardSet : IBelongToUser<int>
     public string? Description { get; set; }
     public bool IsFavorite { get; set; }
     public DateTimeOffset? LastAccess { get; set; }
-    public double Progress { get; set; }
 
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }
     public User Author { get; set; } = default!;
 
     public ICollection<FlashCard> FlashCards { get; set; } = default!;
-
 }

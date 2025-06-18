@@ -6,7 +6,6 @@ namespace WebAPI.Endpoints.FlashCardEndpoints.EditCardFromSet;
 public sealed class EditCardFromSetRequest
 {
     public int CardId { get; set; }
-    public int SetId { get; set; }
     public string Term { get; set; } = default!;
     public string Definition { get; set; } = default!;
     public string? PartOfSpeech { get; set; }

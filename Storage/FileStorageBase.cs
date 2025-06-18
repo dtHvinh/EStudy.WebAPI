@@ -1,4 +1,4 @@
-﻿namespace Storage;
+﻿namespace WebAPI.Storage;
 
 public abstract class FileStorageBase(string url, string key)
 {
