@@ -61,13 +61,7 @@ public class Endpoints(UserManager<User> userManager, IJwtService jwtService, IH
 
     private async Task<string> RegisterAndReturnToken(GoogleUserInfoResponse response)
     {
-        var user = new User()
-        {
-            Name = response.Name,
-            Email = response.Email,
-            ProfilePicture = response.Picture,
-            UserName = Fn.RandomString(5),
-        };
+        var user = response.ToUser();
 
         var createUserResult = await _userManager.CreateAsync(user);
         if (!createUserResult.Succeeded)

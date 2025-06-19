@@ -19,9 +19,20 @@ public class Endpoint(ApplicationDbContext context) : EndpointWithoutRequest
     {
         var id = Query<int>("id");
 
-        var res = await _context.FlashCards
-            .Where(e => e.Id == id)
-            .ExecuteUpdateAsync(e => e.SetProperty(e => e.IsSkipped, true), ct);
+        var card = await _context.FlashCards
+            .Include(e => e.FlashCardSet)
+            .FirstOrDefaultAsync(x => x.Id == id, ct);
+
+        if (card is null)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        card.IsSkipped = true;
+        card.FlashCardSet.LastAccess = DateTimeOffset.UtcNow;
+
+        var res = await _context.SaveChangesAsync(ct);
 
         if (res > 0)
             await SendNoContentAsync(ct);
