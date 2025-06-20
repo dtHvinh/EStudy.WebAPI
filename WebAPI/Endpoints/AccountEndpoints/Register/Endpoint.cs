@@ -1,14 +1,15 @@
 ﻿using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
-using WebAPI.Constants;
 using WebAPI.Models._others;
+using WebAPI.Services;
 
 namespace WebAPI.Endpoints.AccountEndpoints.Register;
 
-internal class Endpoint(UserManager<User> userManager)
+internal class Endpoint(UserManager<User> userManager, IJwtService jwtService)
     : Endpoint<RegisterRequest, RegisterResponse>
 {
     private readonly UserManager<User> _userManager = userManager;
+    private readonly IJwtService _jwtService = jwtService;
 
     public override void Configure()
     {
@@ -27,11 +28,6 @@ internal class Endpoint(UserManager<User> userManager)
         if (!createUserResult.Succeeded)
             ThrowError(createUserResult.Errors.FirstOrDefault()?.Description ?? "Failed to create user");
 
-        var addRoleResult = await _userManager.AddToRoleAsync(newUser, R.Student);
-
-        if (!addRoleResult.Succeeded)
-            ThrowError("Failed to add role to user");
-
-        await SendOkAsync(ct);
+        await SendOkAsync(new(_jwtService.GenerateToken(newUser)), ct);
     }
 }

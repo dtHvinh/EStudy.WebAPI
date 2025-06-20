@@ -2,11 +2,10 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Utilities.Extensions;
-using WebAPI.Utilities.Pagination;
 
 namespace WebAPI.Endpoints.BlogEndpoints.GetUserBlog;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogRequest, PagedResponse<BlogResponse>>
+public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogRequest, List<BlogResponse>>
 {
     private readonly ApplicationDbContext _context = context;
 
@@ -31,7 +30,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
             .Where(b => b.AuthorId == authorId)
             .CountAsync(ct);
 
-        var skip = (req.Page.EnsureLargerOrEqual(1) - 1) * req.PageSize.EnsureInRange(1, 50);
+        var skip = (req.Page - 1) * req.PageSize;
 
         var blogs = await _context.Blogs
             .Where(b => b.AuthorId == authorId)
@@ -41,8 +40,6 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
             .ProjectToResponse()
             .ToListAsync(ct);
 
-        var response = blogs.ToPagedResponse(req.Page, req.PageSize, totalCount);
-
-        await SendAsync(response, cancellation: ct);
+        await SendAsync(blogs, cancellation: ct);
     }
 }

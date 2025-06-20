@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Specialized;
 using System.Text;
-using WebAPI.Constants;
 using WebAPI.Endpoints.AccountEndpoints.Login;
 using WebAPI.Models._others;
 using WebAPI.Services;
@@ -66,9 +65,6 @@ public class Endpoints(UserManager<User> userManager, IJwtService jwtService, IH
         var createUserResult = await _userManager.CreateAsync(user);
         if (!createUserResult.Succeeded)
             ThrowError(createUserResult.Errors.FirstOrDefault()?.Description ?? "Failed to create user");
-        var addRoleResult = await _userManager.AddToRoleAsync(user, R.Student);
-        if (!addRoleResult.Succeeded)
-            ThrowError("Failed to add role to user");
         var token = _jwtService.GenerateToken(user);
         return token;
     }

@@ -84,7 +84,8 @@ public static class SeptupExtensions
                                    policy.WithOrigins(
                                        "http://localhost:7285",
                                        "http://localhost:3000",
-                                       "https://stunning-full-heron.ngrok-free.app"
+                                       "https://stunning-full-heron.ngrok-free.app",
+                                       "https://e-study-client.vercel.app"
                                        );
                                    policy.AllowAnyHeader();
                                    policy.AllowAnyMethod();

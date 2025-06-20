@@ -7,5 +7,6 @@ public sealed class UserResponse
     public string? Email { get; init; }
     public string? PhoneNumber { get; init; }
     public string? ProfilePicture { get; init; }
+    public bool IsOnBoarded { get; init; }
     public DateTimeOffset CreationDate { get; init; }
 }
