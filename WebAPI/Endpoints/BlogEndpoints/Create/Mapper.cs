@@ -33,6 +33,8 @@ public static partial class Mapper
     [MapValue(nameof(Blog.CreationDate), Use = nameof(GetCurrentDate))]
     public static partial Blog ToBlog(this CreateBlogRequest req, User author);
 
+    public static partial CreateBlogResponse ToCreateBlogResponse(this Blog blog);
+
     /// <summary>
     /// Gets the current date and time.
     /// </summary>

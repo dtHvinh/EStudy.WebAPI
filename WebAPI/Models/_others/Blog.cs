@@ -10,7 +10,7 @@ public class Blog : IEntityWithTime<int>, IBelongToUser<int>
     public required string Title { get; set; }
     public required string Content { get; set; }
     public DateTimeOffset CreationDate { get; set; }
-    public DateTimeOffset ModificationDate { get; set; }
+    public DateTimeOffset? ModificationDate { get; set; }
 
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }

@@ -4,7 +4,7 @@ using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.BlogEndpoints.Create;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<CreateBlogRequest>
+public class Endpoint(ApplicationDbContext context) : Endpoint<CreateBlogRequest, CreateBlogResponse>
 {
     private readonly ApplicationDbContext _context = context;
 
@@ -21,8 +21,9 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<CreateBlogRequest
         _context.Blogs.Add(newBlog);
 
         if (await _context.SaveChangesAsync(ct) == 1)
-            await SendOkAsync(ct);
+            await SendOkAsync(newBlog.ToCreateBlogResponse(), ct);
 
         ThrowError("Unable to create blog");
+
     }
 }
