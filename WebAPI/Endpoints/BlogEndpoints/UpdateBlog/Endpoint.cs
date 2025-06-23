@@ -28,7 +28,10 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateBlogRequest
         }
 
         if (blog.AuthorId != int.Parse(this.RetrieveUserId()))
+        {
             await SendForbiddenAsync(ct);
+            return;
+        }
 
         blog.UpdateFrom(req);
 

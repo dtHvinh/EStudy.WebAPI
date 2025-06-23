@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Web;
+using WebAPI.Models.Base;
 using WebAPI.Models.Contract;
 
 namespace WebAPI.Utilities.Extensions;
@@ -34,5 +35,11 @@ public static class ObjectExtensions
             HttpUtility.UrlEncode(value))
             ).ToArray();
         return "?" + string.Join("&", array);
+    }
+
+    public static IReadonlySupportResponse SetReadonly(this IReadonlySupportResponse response, bool isReadonly)
+    {
+        response.IsReadonly = isReadonly;
+        return response;
     }
 }

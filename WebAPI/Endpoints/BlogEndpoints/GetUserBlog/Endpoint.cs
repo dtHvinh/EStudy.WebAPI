@@ -26,10 +26,6 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
             return;
         }
 
-        var totalCount = await _context.Blogs
-            .Where(b => b.AuthorId == authorId)
-            .CountAsync(ct);
-
         var skip = (req.Page - 1) * req.PageSize;
 
         var blogs = await _context.Blogs

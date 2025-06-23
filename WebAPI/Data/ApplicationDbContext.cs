@@ -27,13 +27,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
-
         builder.Ignore<IdentityUserLogin<int>>();
         builder.Ignore<IdentityUserToken<int>>();
         builder.Ignore<IdentityUserLogin<int>>();
         builder.Ignore<IdentityRoleClaim<int>>();
         builder.Ignore<IdentityUserClaim<int>>();
+
+        base.OnModelCreating(builder);
 
         builder.Entity<User>()
             .ToTable("Users")
@@ -61,6 +61,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 p => p.SearchVector,
                 "english",  // Text search config
                 p => new { p.Term, p.Definition, p.PartOfSpeech })  // Included properties
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
+
+        builder.Entity<Blog>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",  // Text search config
+                p => new { p.Title })  // Included properties
             .HasIndex(p => p.SearchVector)
             .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
     }

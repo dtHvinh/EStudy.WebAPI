@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using NpgsqlTypes;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models.Contract;
 
 namespace WebAPI.Models._others;
@@ -15,4 +16,5 @@ public class Blog : IEntityWithTime<int>, IBelongToUser<int>
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }
     public User Author { get; set; } = default!;
+    public NpgsqlTsVector SearchVector { get; set; } = default!;
 }
