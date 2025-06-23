@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250623123631_RemoveSlug")]
+    partial class RemoveSlug
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -437,7 +440,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("SectionId")
+                    b.Property<int>("ExamId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")
@@ -446,7 +449,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("ExamId");
 
                     b.ToTable("Questions");
                 });
@@ -508,58 +511,6 @@ namespace WebAPI.Migrations
                     b.ToTable("TestAttempts");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._testExam.TestCollection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("TestCollections");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._testExam.TestComment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestComments");
-                });
-
             modelBuilder.Entity("WebAPI.Models._testExam.TestExam", b =>
                 {
                     b.Property<int>("Id")
@@ -568,23 +519,11 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AttemptCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CommentCount")
-                        .HasColumnType("integer");
-
                     b.Property<int>("CreatorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Duration")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("QuestionCount")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -595,28 +534,6 @@ namespace WebAPI.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("TestExams");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._testExam.TestSection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("TestSections");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
@@ -732,13 +649,13 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models._testExam.Question", b =>
                 {
-                    b.HasOne("WebAPI.Models._testExam.TestSection", "Section")
+                    b.HasOne("WebAPI.Models._testExam.TestExam", "Exam")
                         .WithMany("Questions")
-                        .HasForeignKey("SectionId")
+                        .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Section");
+                    b.Navigation("Exam");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestAnswerSellection", b =>
@@ -787,36 +704,6 @@ namespace WebAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._testExam.TestCollection", b =>
-                {
-                    b.HasOne("WebAPI.Models._others.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._testExam.TestComment", b =>
-                {
-                    b.HasOne("WebAPI.Models._others.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebAPI.Models._testExam.TestExam", "Test")
-                        .WithMany("Comments")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Test");
-                });
-
             modelBuilder.Entity("WebAPI.Models._testExam.TestExam", b =>
                 {
                     b.HasOne("WebAPI.Models._others.User", "Creator")
@@ -826,17 +713,6 @@ namespace WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._testExam.TestSection", b =>
-                {
-                    b.HasOne("WebAPI.Models._testExam.TestExam", "Test")
-                        .WithMany("Sections")
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.Chapter", b =>
@@ -876,13 +752,6 @@ namespace WebAPI.Migrations
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestExam", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("Sections");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._testExam.TestSection", b =>
                 {
                     b.Navigation("Questions");
                 });

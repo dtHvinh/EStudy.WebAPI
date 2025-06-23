@@ -1,17 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models._others;
 using WebAPI.Models.Contract;
 
 namespace WebAPI.Models._course;
 
 [Table("Courses")]
-[Index(nameof(Slug))]
 public class Course : IBelongToUser<int>, IEntityWithTime<int>
 {
     public int Id { get; set; }
     public required string Title { get; set; }
-    public required string Slug { get; set; }
     public required string Description { get; set; }
 
     public DateTimeOffset CreationDate { get; set; }

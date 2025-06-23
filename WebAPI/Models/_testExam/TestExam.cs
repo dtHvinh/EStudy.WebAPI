@@ -14,6 +14,11 @@ public class TestExam
     public User Creator { get; set; } = default!;
 
     public bool IsPublic { get; set; }
+    public int Duration { get; set; }
+    public int AttemptCount { get; set; }
+    public int CommentCount { get; set; }
+    public int QuestionCount { get; set; }
 
-    public ICollection<Question> Questions { get; set; } = default!;
+    public ICollection<TestSection> Sections { get; set; } = default!;
+    public ICollection<TestComment> Comments { get; set; } = default!;
 }
