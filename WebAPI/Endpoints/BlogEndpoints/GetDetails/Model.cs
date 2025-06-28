@@ -14,5 +14,5 @@ public sealed class GetBlogDetailsResponse : IReadonlySupportResponse
     public string Content { get; init; } = default!;
     public DateTimeOffset CreationDate { get; init; }
     public DateTimeOffset? ModificationDate { get; init; }
-    public bool IsReadonly { get; set; }
+    public bool IsReadOnly { get; set; }
 }

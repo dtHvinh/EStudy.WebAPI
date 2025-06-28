@@ -29,6 +29,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TestCollection> TestCollections { get; set; } = default!;
     public DbSet<TestExam> TestExams { get; set; } = default!;
     public DbSet<TestSection> TestSections { get; set; } = default!;
+    public DbSet<TestComment> TestComments { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -71,6 +72,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
 
         builder.Entity<Blog>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",  // Text search config
+                p => new { p.Title })  // Included properties
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
+
+        builder.Entity<TestExam>()
             .HasGeneratedTsVectorColumn(
                 p => p.SearchVector,
                 "english",  // Text search config

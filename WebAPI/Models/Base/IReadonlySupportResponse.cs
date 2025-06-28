@@ -2,5 +2,5 @@
 
 public interface IReadonlySupportResponse
 {
-    bool IsReadonly { get; set; }
+    bool IsReadOnly { get; set; }
 }

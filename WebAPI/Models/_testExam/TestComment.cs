@@ -5,10 +5,12 @@ using WebAPI.Models.Contract;
 namespace WebAPI.Models._testExam;
 
 [Table("TestComments")]
-public class TestComment : IBelongToUser<int>
+public class TestComment : IBelongToUser<int>, IEntityWithTime<int>
 {
     public int Id { get; set; }
-    public string Comment { get; set; } = default!;
+    public string Text { get; set; } = default!;
+
+    public DateTimeOffset CreationDate { get; set; }
 
     [ForeignKey(nameof(Test))]
     public int TestId { get; set; }

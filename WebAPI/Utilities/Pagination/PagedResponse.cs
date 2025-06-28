@@ -9,4 +9,6 @@ public class PagedResponse<T>
     public int TotalPages { get; init; }
     public bool HasPrevious => Page > 1;
     public bool HasNext => Page < TotalPages;
+
+
 }

@@ -39,7 +39,7 @@ public static class ObjectExtensions
 
     public static IReadonlySupportResponse SetReadonly(this IReadonlySupportResponse response, bool isReadonly)
     {
-        response.IsReadonly = isReadonly;
+        response.IsReadOnly = isReadonly;
         return response;
     }
 }
