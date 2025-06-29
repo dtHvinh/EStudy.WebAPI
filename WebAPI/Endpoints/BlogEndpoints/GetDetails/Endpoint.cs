@@ -14,7 +14,6 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetBlogDetailsReq
         Get("{id}");
         Group<BlogGroup>();
         Description(d => d.WithName("GetBlogDetails").WithDescription("Gets the blog details"));
-
     }
 
     public override async Task HandleAsync(GetBlogDetailsRequest req, CancellationToken ct)
