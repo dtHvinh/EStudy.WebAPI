@@ -18,7 +18,7 @@ public class TestAttempt : IEntityWithTime<int>
     public TestExam TestExam { get; set; } = default!;
 
     public DateTimeOffset CreationDate { get; set; }
-    public double? Score { get; set; }
+    public int TimeSpent { get; set; } // in seconds
 
     public ICollection<TestAnswerSellection> AnswerSelections { get; set; } = default!;
 }

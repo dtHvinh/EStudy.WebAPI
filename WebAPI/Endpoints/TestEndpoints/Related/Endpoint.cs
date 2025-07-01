@@ -35,7 +35,7 @@ public class Endpoint(ApplicationDbContext context)
         try
         {
             relatedTests = await _context.TestExams
-                .Where(e => e.SearchVector.Matches(test.Title))
+                .Where(e => e.Id != req.TestId && e.SearchVector.Matches(test.Title))
                 .OrderByDescending(e => e.SearchVector.Rank(
                     EF.Functions.ToTsQuery(f)))
                 .ProjectToRelatedTestResponse()

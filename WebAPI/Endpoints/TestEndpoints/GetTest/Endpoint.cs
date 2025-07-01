@@ -5,34 +5,33 @@ using WebAPI.Data;
 namespace WebAPI.Endpoints.TestEndpoints.GetTest;
 
 public class Endpoint(ApplicationDbContext context)
-    : Endpoint<GetTestRequest, List<GetTestResponse>>
+    : Endpoint<GetTestRequest, GetTestResponse>
 {
     private readonly ApplicationDbContext _context = context;
 
     public override void Configure()
     {
-        Get("");
+        Get("{TestId}");
         Group<TestGroup>();
-        Description(d => d.WithName("Get test").WithDescription("Get list of test with pagination"));
-
+        Description(d => d.WithName("Get test ").WithDescription("Get test with questions"));
     }
 
     public override async Task HandleAsync(GetTestRequest req, CancellationToken ct)
     {
-        var q = Query<string>("q", false);
+        var test = await _context.TestExams
+            .Include(e => e.Sections)
+            .ThenInclude(e => e.Questions)
+            .ThenInclude(e => e.Answers)
+            .AsSplitQuery()
+            .ProjectToResponse()
+            .FirstOrDefaultAsync(t => t.Id == req.TestId, ct);
 
-        var query = _context.TestExams.AsQueryable();
+        if (test is null)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
 
-        if (!string.IsNullOrEmpty(q))
-            query = query.Where(x => x.SearchVector.Matches(q));
-
-        var res = await query
-            .OrderByDescending(x => x.Id)
-            .Skip(req.PageSize * (req.Page - 1))
-            .Take(req.PageSize)
-            .ProjectToGetTestResponse()
-            .ToListAsync(ct);
-
-        await SendOkAsync(res, ct);
+        await SendOkAsync(test, ct);
     }
 }

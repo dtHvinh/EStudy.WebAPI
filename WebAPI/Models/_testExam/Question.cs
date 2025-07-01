@@ -8,6 +8,7 @@ public class Question
     public required string Type { get; set; }
     public required string Text { get; set; }
     public int Points { get; set; }
+    public string? Explanation { get; set; }
 
     [ForeignKey(nameof(Section))]
     public int SectionId { get; set; }
