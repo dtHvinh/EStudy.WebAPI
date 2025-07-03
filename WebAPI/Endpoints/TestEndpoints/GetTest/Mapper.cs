@@ -18,7 +18,7 @@ public static partial class Mapper
             Duration = test.Duration,
             PassingScore = test.PassingScore,
             SectionCount = test.Sections.Count,
-            AttemptCount = test.AttemptCount,
+            AttemptCount = test.Attempts.Count,
             QuestionCount = test.Sections.Sum(s => s.Questions.Count),
             Sections = test.Sections.ProjectToSection().ToList(),
         });

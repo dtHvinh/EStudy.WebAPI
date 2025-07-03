@@ -19,6 +19,7 @@ public class TestAttempt : IEntityWithTime<int>
 
     public DateTimeOffset CreationDate { get; set; }
     public int TimeSpent { get; set; } // in seconds
+    public int EarnedPoints { get; set; }
 
     public ICollection<TestAnswerSellection> AnswerSelections { get; set; } = default!;
 }

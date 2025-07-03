@@ -17,10 +17,9 @@ public class TestExam
     public int CreatorId { get; set; }
     public User Creator { get; set; } = default!;
 
-    public int AttemptCount { get; set; }
-
     public NpgsqlTsVector SearchVector { get; set; } = default!;
 
     public ICollection<TestSection> Sections { get; set; } = default!;
     public ICollection<TestComment> Comments { get; set; } = default!;
+    public ICollection<TestAttempt> Attempts { get; set; } = default!;
 }

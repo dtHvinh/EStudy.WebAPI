@@ -16,7 +16,7 @@ public static partial class Mapper
                 Title = x.Title,
                 Description = x.Description,
                 Duration = x.Duration,
-                AttemptCount = x.AttemptCount,
+                AttemptCount = x.Attempts.Count,
                 QuestionCount = x.Sections.Sum(e => e.Questions.Count),
                 SectionCount = x.Sections.Count,
                 CommentCount = x.Comments.Count
