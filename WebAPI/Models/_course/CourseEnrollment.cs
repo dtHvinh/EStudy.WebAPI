@@ -15,5 +15,12 @@ public class CourseEnrollment
     [ForeignKey(nameof(User))]
     public int UserId { get; set; }
     public User User { get; set; } = default!;
-}
 
+    public DateTimeOffset EnrollmentDate { get; set; }
+    public DateTimeOffset? CompletionDate { get; set; }
+    public int ProgressPercentage { get; set; } = 0;
+    public DateTimeOffset? LastAccessDate { get; set; }
+    public bool IsCompleted { get; set; } = false;
+    public bool IsFavorite { get; set; } = false;
+    public int TimeSpentMinutes { get; set; } = 0;
+}

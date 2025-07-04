@@ -9,13 +9,18 @@ public class FileService(string url, string key) : FileStorageBase(url, key)
     private IStorageFileApi<FileObject> EStudyBucket => Client.Storage.From("estudy");
     private readonly Supabase.Storage.FileOptions _options = new() { Upsert = true, CacheControl = "0" };
 
-    public async Task<string> UploadFlashCardImage(IFormFile file, CancellationToken cancellationToken)
+    private string GetUserResourcesBucketPath(string userId)
+    {
+        return string.Concat("resources/", userId, "/");
+    }
+
+    public async Task<string> UploadFlashCardImage(IFormFile file, string userId, CancellationToken cancellationToken)
     {
         using var stream = new MemoryStream();
         await file.CopyToAsync(stream, cancellationToken);
 
         var extension = Path.GetExtension(file.FileName);
-        var bucketFilePath = string.Concat("flash-cards/", Guid.NewGuid().ToString().AsSpan(0, 8).ToString(), extension);
+        var bucketFilePath = string.Concat(GetUserResourcesBucketPath(userId), Guid.NewGuid().ToString().AsSpan(0, 8).ToString(), extension);
 
         var path = await EStudyBucket.Upload(
             stream.ToArray(),

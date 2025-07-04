@@ -36,7 +36,7 @@ public class Endpoint(ApplicationDbContext context, FileService fileService) : E
             if (card.ImageUrl is not null)
                 await _fileService.UpdateFlashCardImage(card.ImageUrl, req.Image, ct);
             else
-                card.ImageUrl = await _fileService.UploadFlashCardImage(req.Image, ct);
+                card.ImageUrl = await _fileService.UploadFlashCardImage(req.Image, this.RetrieveUserId(), ct);
         }
 
         _context.FlashCards.Update(card);

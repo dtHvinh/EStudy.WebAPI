@@ -14,10 +14,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Resource> Resources { get; set; } = default!;
     public DbSet<Blog> Blogs { get; set; } = default!;
 
-    public DbSet<Chapter> Chapters { get; set; } = default!;
+    public DbSet<CourseChapter> Chapters { get; set; } = default!;
     public DbSet<Course> Courses { get; set; } = default!;
     public DbSet<CourseEnrollment> CourseEnrollments { get; set; } = default!;
-    public DbSet<Lesson> Lessons { get; set; } = default!;
+    public DbSet<CourseLesson> Lessons { get; set; } = default!;
 
     public DbSet<FlashCard> FlashCards { get; set; } = default!;
     public DbSet<FlashCardSet> FlashCardSets { get; set; } = default!;
