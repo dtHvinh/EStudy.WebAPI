@@ -17,7 +17,6 @@ public class Course : IBelongToUser<int>, IEntityWithTime<int>
     public decimal Price { get; set; } = 0;
     public bool IsFree { get; set; } = true;
     public bool IsPublished { get; set; } = false;
-    public string? PreviewVideoUrl { get; set; }
     public string? Prerequisites { get; set; } // Line separated string of prerequisites
     public string? LearningObjectives { get; set; } // Line separated string of learning objectives
     public string? Language { get; set; } = "English";
