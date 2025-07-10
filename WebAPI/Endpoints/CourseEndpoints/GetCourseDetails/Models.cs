@@ -21,5 +21,23 @@ public sealed class GetCourseDetailsResponse
     public string? LearningObjectives { get; set; }
     public string? Language { get; set; } = default!;
     public int EstimatedDurationHours { get; set; } = 0;
-    public int StudentsCount { get; set; } = 0;
+
+    public int StudentCount { get; set; } = 0;
+    public int RatingCount { get; set; } = 0;
+    public double AverageRating { get; set; } = 0.0;
+
+    public InstructorDataResponse? Instructor { get; set; } = default!;
+}
+
+public sealed class InstructorDataResponse
+{
+    public int Id { get; set; }
+    public string FullName { get; set; } = default!;
+    public string? ProfilePicture { get; set; }
+    public string? Bio { get; set; } = default!;
+
+    public double AverageRating { get; set; } = 0.0;
+    public int RatingCount { get; set; } = 0;
+    public int CourseCount { get; set; } = 0;
+    public int StudentCount { get; set; } = 0;
 }

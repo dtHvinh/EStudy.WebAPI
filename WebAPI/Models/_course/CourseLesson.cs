@@ -8,7 +8,7 @@ public class CourseLesson : IOrderedItem
 {
     public int Id { get; set; }
     public required string Title { get; set; }
-    public required string VideoUrl { get; set; }
+    public string? VideoUrl { get; set; }
     public string Content { get; set; } = default!;
     public string? Description { get; set; }
     public int DurationMinutes { get; set; } = 0;
