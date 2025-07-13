@@ -30,6 +30,9 @@ public class Endpoint(UserManager<User> userManager)
         if (req.Role.Equals(R.Instructor, StringComparison.OrdinalIgnoreCase))
             await _userManager.AddToRoleAsync(user, req.Role);
 
+        else if (req.Role.Equals(R.Student, StringComparison.OrdinalIgnoreCase))
+            await _userManager.AddToRoleAsync(user, R.Student);
+
         user.IsOnBoarded = true;
         await _userManager.UpdateAsync(user);
 

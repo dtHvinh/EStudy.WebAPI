@@ -44,6 +44,15 @@ public class Endpoint(ApplicationDbContext context)
             return;
         }
 
+        course.Title = request.Title;
+        course.Description = request.Description;
+        course.ImageUrl = request.ImageUrl;
+        course.DifficultyLevel = request.DifficultyLevel;
+        course.Price = request.Price;
+        course.IsFree = request.IsFree;
+        course.Prerequisites = request.Prerequisites;
+        course.LearningObjectives = request.LearningObjectives;
+        course.Language = request.Language;
         course.IsPublished = request.IsPublished;
         course.Chapters = [.. request.Chapters.Select(chapter => new CourseChapter
         {

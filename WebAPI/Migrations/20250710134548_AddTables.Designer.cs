@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250710134548_AddTables")]
+    partial class AddTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,6 +288,9 @@ namespace WebAPI.Migrations
                     b.Property<DateTimeOffset?>("CompletionDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset?>("LastWatchedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -303,7 +309,7 @@ namespace WebAPI.Migrations
                     b.ToTable("LessonProgress");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._course.UserLessonNote", b =>
+            modelBuilder.Entity("WebAPI.Models._course.UserCourseNote", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -315,11 +321,11 @@ namespace WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("LessonId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
@@ -329,11 +335,11 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLessonNotes");
+                    b.ToTable("UserCourseNotes");
                 });
 
             modelBuilder.Entity("WebAPI.Models._flashCard.FlashCard", b =>
@@ -964,11 +970,11 @@ namespace WebAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._course.UserLessonNote", b =>
+            modelBuilder.Entity("WebAPI.Models._course.UserCourseNote", b =>
                 {
-                    b.HasOne("WebAPI.Models._course.CourseLesson", "Lesson")
+                    b.HasOne("WebAPI.Models._course.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("LessonId")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -978,7 +984,7 @@ namespace WebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Lesson");
+                    b.Navigation("Course");
 
                     b.Navigation("User");
                 });

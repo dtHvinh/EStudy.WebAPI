@@ -18,6 +18,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Course> Courses { get; set; } = default!;
     public DbSet<CourseEnrollment> CourseEnrollments { get; set; } = default!;
     public DbSet<CourseLesson> Lessons { get; set; } = default!;
+    public DbSet<UserLessonNote> UserCourseNotes { get; set; } = default!;
+    public DbSet<LessonProgress> LessonProgresses { get; set; } = default!;
+    public DbSet<CourseRating> CourseRatings { get; set; } = default!;
 
     public DbSet<FlashCard> FlashCards { get; set; } = default!;
     public DbSet<FlashCardSet> FlashCardSets { get; set; } = default!;

@@ -1,0 +1,84 @@
+﻿using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
+using WebAPI.Data;
+using WebAPI.Utilities.Extensions;
+
+namespace WebAPI.Endpoints.CourseEndpoints.GetCourseToLearn;
+
+public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnRequest, GetCourseToLearnResponse>
+{
+    private readonly ApplicationDbContext _context = context;
+
+    public override void Configure()
+    {
+        Get("{CourseId}/learn");
+        Group<CourseGroup>();
+    }
+
+    public override async Task HandleAsync(GetCourseToLearnRequest req, CancellationToken ct)
+    {
+        var isEnrolled = _context.CourseEnrollments
+        .Any(e => e.CourseId == req.CourseId && e.UserId == int.Parse(this.RetrieveUserId()));
+
+        if (!isEnrolled)
+        {
+            await SendUnauthorizedAsync(ct);
+            return;
+        }
+
+        var userId = int.Parse(this.RetrieveUserId());
+
+        var course = await _context.Courses
+            .Where(e => e.Id == req.CourseId)
+            .Select(e => new GetCourseToLearnResponse
+            {
+                StudentCount = e.Enrollments.Count(e => e.CourseId == req.CourseId),
+                Title = e.Title,
+                AverageRating = e.Ratings.Where(e => e.CourseId == req.CourseId)
+                    .Select(e => e.Value)
+                    .DefaultIfEmpty()
+                    .Average(),
+                Chapters = e.Chapters
+                    .OrderBy(chapter => chapter.OrderIndex)
+                    .Select(chapter => new GetCourseToLearnChapterResponse
+                    {
+                        Id = chapter.Id,
+                        Title = chapter.Title,
+                        Description = chapter.Description,
+                        OrderIndex = chapter.OrderIndex,
+                        IsPublished = chapter.IsPublished,
+                        TotalMinutes = chapter.Lessons.Sum(lesson => lesson.DurationMinutes),
+                        Lessons = chapter.Lessons
+                            .OrderBy(lesson => lesson.OrderIndex)
+                            .Select(lesson => new GetCourseToLearnLessonResponse
+                            {
+                                Id = lesson.Id,
+                                Title = lesson.Title,
+                                AttachedFileUrls = lesson.Attachments.Select(a => a.Url).ToList(),
+                                Content = lesson.Content,
+                                Description = lesson.Description,
+                                DurationMinutes = lesson.DurationMinutes,
+                                OrderIndex = lesson.OrderIndex,
+                                TranscriptUrl = lesson.TranscriptUrl,
+                                VideoUrl = lesson.VideoUrl,
+                                Note = _context.UserCourseNotes
+                                        .Where(n => n.UserId == userId && n.LessonId == lesson.Id)
+                                        .Select(n => new GetCourseToLearnNote
+                                        {
+                                            Content = n.Content
+                                        }).FirstOrDefault(),
+                                IsCompleted = _context.LessonProgresses
+                                    .Any(clc => clc.UserId == userId && clc.LessonId == lesson.Id)
+                            }).ToList()
+                    }).ToList()
+            }).FirstOrDefaultAsync(ct);
+
+        if (course == null)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        await SendOkAsync(course, ct);
+    }
+}
