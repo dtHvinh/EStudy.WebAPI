@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Minio;
 using System.Text;
 using WebAPI.Data;
 using WebAPI.Models._others;
@@ -111,6 +112,22 @@ public static class SeptupExtensions
             var storage = new FileService(supabaseUrl, supabaseKey);
             storage.InitializeAsync();
             return storage;
+        });
+
+        services.AddMinio(cf => cf
+                .WithEndpoint(Config["Minio:Url"])
+                .WithCredentials(Config["Minio:AccessKey"], Config["Minio:SecretKey"])
+                .Build());
+
+        services.AddSingleton(cf =>
+        {
+            var client = cf.GetRequiredService<IMinioClient>();
+            var bucketName = Config["Minio:BucketName"]
+            ?? throw new InvalidOperationException("Minio bucket name must be configured");
+
+            var bucketArgs = new BucketArgs { BucketName = bucketName };
+
+            return new FileServiceV2(client, bucketArgs);
         });
 
         return services;

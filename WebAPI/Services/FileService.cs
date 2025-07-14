@@ -9,7 +9,7 @@ public class FileService(string url, string key) : FileStorageBase(url, key)
     private IStorageFileApi<FileObject> EStudyBucket => Client.Storage.From("estudy");
     private readonly Supabase.Storage.FileOptions _options = new() { Upsert = true, CacheControl = "0" };
 
-    private string GetUserResourcesBucketPath(string userId)
+    private static string GetUserResourcesBucketPath(string userId)
     {
         return string.Concat("resources/", userId, "/");
     }
