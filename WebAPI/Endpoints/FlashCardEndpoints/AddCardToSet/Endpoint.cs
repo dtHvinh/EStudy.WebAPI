@@ -17,6 +17,15 @@ public class Endpoint(ApplicationDbContext context, FileService fileService) : E
         Post("add-to/{setId}");
         AllowFileUploads();
         Group<FlashCardGroup>();
+        Description(d => d
+            .WithName("Add Card to Set")
+            .WithDescription("Add a new flashcard to an existing flashcard set with optional image upload")
+            .Produces<AddCardResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(AddCardRequest req, CancellationToken ct)

@@ -117,6 +117,7 @@ public static class SeptupExtensions
         services.AddMinio(cf => cf
                 .WithEndpoint(Config["Minio:Url"])
                 .WithCredentials(Config["Minio:AccessKey"], Config["Minio:SecretKey"])
+                .WithSSL(false)
                 .Build());
 
         services.AddSingleton(cf =>

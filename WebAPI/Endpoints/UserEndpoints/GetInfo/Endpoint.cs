@@ -13,7 +13,13 @@ internal class Endpoint(UserManager<User> userManager) : EndpointWithoutRequest<
     {
         Get("me");
         Group<UserGroup>();
-        Description(d => d.WithName("GetCurrentUser").WithDescription("Get the current authenticated user's information"));
+        Description(d => d
+            .WithName("Get Current User")
+            .WithDescription("Get the current authenticated user's information")
+            .Produces<UserResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(CancellationToken ct)

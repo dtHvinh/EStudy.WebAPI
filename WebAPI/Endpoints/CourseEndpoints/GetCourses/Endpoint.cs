@@ -11,9 +11,11 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCoursesRequest
         Get("");
         AllowAnonymous();
         Description(x => x
-            .WithName("GetCourses")
+            .WithName("Get Courses")
+            .WithDescription("Get paginated list of published courses with optional name filtering")
             .Produces<List<GetCourseResponse>>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound));
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(GetCoursesRequest req, CancellationToken ct)

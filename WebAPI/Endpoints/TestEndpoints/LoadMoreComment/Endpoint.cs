@@ -13,8 +13,12 @@ public class Endpoint(ApplicationDbContext context)
     {
         Get("{TestId}/comments");
         Group<TestGroup>();
-        Description(d => d.WithName("Load comments").WithDescription("Load comments"));
-
+        Description(d => d
+            .WithName("Load Comments")
+            .WithDescription("Load paginated comments for a test")
+            .Produces<List<LoadMoreCommentResponse>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(LoadMoreCommentRequest req, CancellationToken ct)

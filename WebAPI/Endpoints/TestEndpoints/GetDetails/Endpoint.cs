@@ -14,8 +14,12 @@ public class Endpoint(ApplicationDbContext context)
     {
         Get("details/{Id}");
         Group<TestGroup>();
-        Description(d => d.WithName("Get test details").WithDescription("Get test details"));
-
+        Description(d => d
+            .WithName("Get Test Details")
+            .WithDescription("Get test details with comments and pagination")
+            .Produces<GetTestDetailsResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(GetTestDetailsRequest req, CancellationToken ct)

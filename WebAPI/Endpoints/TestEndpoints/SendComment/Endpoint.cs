@@ -13,8 +13,13 @@ public class Endpoint(ApplicationDbContext context)
     {
         Post("{TestId}/comments");
         Group<TestGroup>();
-        Description(d => d.WithName("Send comment").WithDescription("Send comment to a test"));
-
+        Description(d => d
+            .WithName("Send Comment")
+            .WithDescription("Send a comment to a test")
+            .Produces<SendCommentResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(SendCommentRequest req, CancellationToken ct)

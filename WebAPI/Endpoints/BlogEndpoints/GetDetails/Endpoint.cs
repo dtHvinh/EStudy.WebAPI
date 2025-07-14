@@ -13,7 +13,13 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetBlogDetailsReq
     {
         Get("{id}");
         Group<BlogGroup>();
-        Description(d => d.WithName("GetBlogDetails").WithDescription("Gets the blog details"));
+        Description(d => d
+            .WithName("Get Blog Details")
+            .WithDescription("Gets the blog details with author information and readonly status")
+            .Produces<GetBlogDetailsResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(GetBlogDetailsRequest req, CancellationToken ct)

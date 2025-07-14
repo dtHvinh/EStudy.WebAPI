@@ -13,8 +13,12 @@ public class Endpoint(ApplicationDbContext context)
     {
         Get("{TestId}/related");
         Group<TestGroup>();
-        Description(d => d.WithName("Get related test").WithDescription("Get list of test related with the test with given id"));
-
+        Description(d => d
+            .WithName("Get Related Tests")
+            .WithDescription("Get list of tests related to the test with given id using full-text search")
+            .Produces<List<RelatedTestResponse>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(RelatedTestRequest req, CancellationToken ct)

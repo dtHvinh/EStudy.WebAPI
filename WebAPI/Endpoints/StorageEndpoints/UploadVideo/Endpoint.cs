@@ -10,7 +10,6 @@ public class Endpoint(FileServiceV2 fileService) : Endpoint<UploadVideoRequest, 
     public override void Configure()
     {
         Post("upload/video");
-        AllowAnonymous();
         AllowFileUploads();
         Description(x => x
             .WithName("Upload Video")
@@ -22,12 +21,6 @@ public class Endpoint(FileServiceV2 fileService) : Endpoint<UploadVideoRequest, 
 
     public override async Task HandleAsync(UploadVideoRequest req, CancellationToken ct)
     {
-        if (req.File.Length == 0)
-        {
-            ThrowError("File cannot be empty.", StatusCodes.Status400BadRequest);
-            return;
-        }
-
         var videoUrl = await fileService.UploadFileAsync(req.File, StorageFileType.Video, ct);
 
         await SendOkAsync(new UploadVideoResponse

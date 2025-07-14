@@ -13,7 +13,12 @@ public class Endpoint(ApplicationDbContext context)
     {
         Get("{TestId}");
         Group<TestGroup>();
-        Description(d => d.WithName("Get test ").WithDescription("Get test with questions"));
+        Description(d => d
+            .WithName("Get Test")
+            .WithDescription("Get test with questions and answers")
+            .Produces<GetTestResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(GetTestRequest req, CancellationToken ct)

@@ -16,6 +16,15 @@ public class Endpoint(ApplicationDbContext context, FileService fileService) : E
         Put("{cardId}");
         AllowFileUploads();
         Group<FlashCardGroup>();
+        Description(d => d
+            .WithName("Edit Flash Card")
+            .WithDescription("Edit an existing flashcard with optional image update")
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError));
     }
 
     public override async Task HandleAsync(EditCardFromSetRequest req, CancellationToken ct)
