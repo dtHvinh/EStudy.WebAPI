@@ -1,6 +1,7 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.CourseEndpoints.GetCourses;
 
@@ -31,7 +32,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCoursesRequest
         var response = await courses
             .Skip(req.PageSize * (req.Page - 1))
             .Take(req.PageSize)
-            .ProjectToGetCoursesResponse()
+            .ProjectToGetCoursesResponse(int.Parse(this.RetrieveUserId()))
             .ToListAsync(ct);
 
         await SendOkAsync(response, ct);

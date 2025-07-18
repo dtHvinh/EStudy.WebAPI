@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models._others;
 
 namespace WebAPI.Models._course;
 
 [Table("LessonProgress")]
+[Index(nameof(LessonId), nameof(UserId), IsUnique = true)]
 public class LessonProgress
 {
     public int Id { get; set; }
@@ -17,5 +19,4 @@ public class LessonProgress
     public User User { get; set; } = default!;
 
     public DateTimeOffset? CompletionDate { get; set; }
-    public DateTimeOffset? LastWatchedDate { get; set; }
 }

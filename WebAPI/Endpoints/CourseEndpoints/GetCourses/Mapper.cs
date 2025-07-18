@@ -6,7 +6,7 @@ namespace WebAPI.Endpoints.CourseEndpoints.GetCourses;
 [Mapper]
 public static partial class Mapper
 {
-    public static IQueryable<GetCourseResponse> ProjectToGetCoursesResponse(this IQueryable<Course> courses)
+    public static IQueryable<GetCourseResponse> ProjectToGetCoursesResponse(this IQueryable<Course> courses, int userId)
     {
         return Queryable.Select(
               courses,
@@ -26,7 +26,8 @@ public static partial class Mapper
                   LearningObjectives = x.LearningObjectives,
                   Language = x.Language,
                   EstimatedDurationHours = x.EstimatedDurationHours,
-                  StudentsCount = x.Enrollments.Count
+                  StudentsCount = x.Enrollments.Count,
+                  IsEnrolled = x.Enrollments.Any(e => e.UserId == userId)
               }
           );
     }

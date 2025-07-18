@@ -5,7 +5,7 @@ using WebAPI.Models.Contract;
 namespace WebAPI.Models._course;
 
 [Table("Courses")]
-public class Course : IBelongToUser<int>, IEntityWithTime<int>
+public class Course : IBelongToUser<int>, IEntityWithTime<int>, IPurchasable<int>
 {
     public int Id { get; set; }
     public required string Title { get; set; }

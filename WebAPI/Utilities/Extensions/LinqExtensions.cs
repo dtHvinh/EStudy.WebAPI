@@ -75,4 +75,11 @@ public static class LinqExtensions
         return newQuery;
 #nullable enable
     }
+
+    public static IQueryable<TSource> Paginate<TSource>(this IQueryable<TSource> query, int pageNumber, int pageSize)
+    {
+        if (pageNumber < 1 || pageSize < 1)
+            throw new ArgumentOutOfRangeException("Page number and size must be greater than zero.");
+        return query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+    }
 }

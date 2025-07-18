@@ -26,10 +26,12 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureDatabase();
 builder.Services.ConfigureJwtAuthentication();
 builder.Services.RegisterServices();
+builder.Services.RegisterPayment();
 builder.WebHost.ConfigureKestrel(o =>
 {
     o.Limits.MaxRequestBodySize = 700_741_824;
 });
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();

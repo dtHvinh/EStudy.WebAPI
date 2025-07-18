@@ -10,7 +10,7 @@ public class UserLessonNote : IEntityWithTime<int>
     public int Id { get; set; }
     public string Content { get; set; } = default!;
     public DateTimeOffset CreationDate { get; set; }
-    public DateTimeOffset ModificationDate { get; set; }
+    public DateTimeOffset? ModificationDate { get; set; }
 
     public int LessonId { get; set; }
     public CourseLesson Lesson { get; set; } = default!;

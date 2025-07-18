@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Minio;
+using Stripe;
 using System.Text;
 using WebAPI.Data;
 using WebAPI.Models._others;
@@ -109,7 +110,7 @@ public static class SeptupExtensions
             var supabaseUrl = Config["Supabase:Url"]
             ?? throw new InvalidOperationException("Supabase Url must be configured");
 
-            var storage = new FileService(supabaseUrl, supabaseKey);
+            var storage = new Services.FileService(supabaseUrl, supabaseKey);
             storage.InitializeAsync();
             return storage;
         });
@@ -130,6 +131,13 @@ public static class SeptupExtensions
 
             return new FileServiceV2(client, bucketArgs);
         });
+
+        return services;
+    }
+
+    public static IServiceCollection RegisterPayment(this IServiceCollection services)
+    {
+        StripeConfiguration.ApiKey = Config["Stripe:ApiKey"];
 
         return services;
     }

@@ -17,6 +17,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
 
     public override async Task HandleAsync(GetCourseToLearnRequest req, CancellationToken ct)
     {
+        // TODO: Use split query ?? 
         var isEnrolled = _context.CourseEnrollments
         .Any(e => e.CourseId == req.CourseId && e.UserId == int.Parse(this.RetrieveUserId()));
 
@@ -34,6 +35,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
             {
                 StudentCount = e.Enrollments.Count(e => e.CourseId == req.CourseId),
                 Title = e.Title,
+                IsRated = e.Ratings.Any(r => r.UserId == userId),
                 AverageRating = e.Ratings.Where(e => e.CourseId == req.CourseId)
                     .Select(e => e.Value)
                     .DefaultIfEmpty()
@@ -61,7 +63,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
                                 OrderIndex = lesson.OrderIndex,
                                 TranscriptUrl = lesson.TranscriptUrl,
                                 VideoUrl = lesson.VideoUrl,
-                                Note = _context.UserCourseNotes
+                                Note = _context.LessonNotes
                                         .Where(n => n.UserId == userId && n.LessonId == lesson.Id)
                                         .Select(n => new GetCourseToLearnNote
                                         {

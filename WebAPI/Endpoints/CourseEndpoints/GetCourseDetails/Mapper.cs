@@ -47,7 +47,7 @@ public static partial class Mapper
                         .Average(),
                     RatingCount = x.Author.Courses.Sum(e => e.Ratings.Count),
                     CourseCount = x.Author.Courses.Count,
-                    StudentCount = x.Author.Enrollments.Count,
+                    StudentCount = x.Author.Courses.Select(e => e.Enrollments.Count).DefaultIfEmpty().Sum(),
                 }
             }
         );

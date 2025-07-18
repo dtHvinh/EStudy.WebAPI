@@ -285,9 +285,6 @@ namespace WebAPI.Migrations
                     b.Property<DateTimeOffset?>("CompletionDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("LastWatchedDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("LessonId")
                         .HasColumnType("integer");
 
@@ -296,9 +293,10 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("LessonId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("LessonProgress");
                 });
@@ -321,7 +319,7 @@ namespace WebAPI.Migrations
                     b.Property<int>("LessonId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("ModificationDate")
+                    b.Property<DateTimeOffset?>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserId")
@@ -597,6 +595,42 @@ namespace WebAPI.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("WebAPI.Models._payment.Transaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentIntentId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ProductType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.Answer", b =>
@@ -1014,6 +1048,17 @@ namespace WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._payment.Transaction", b =>
+                {
+                    b.HasOne("WebAPI.Models._others.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.Answer", b =>

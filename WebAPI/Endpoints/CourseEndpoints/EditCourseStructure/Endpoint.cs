@@ -54,6 +54,7 @@ public class Endpoint(ApplicationDbContext context)
         course.LearningObjectives = request.LearningObjectives;
         course.Language = request.Language;
         course.IsPublished = request.IsPublished;
+        course.ModificationDate = DateTimeOffset.UtcNow;
         course.Chapters = [.. request.Chapters.Select(chapter => new CourseChapter
         {
             Id = chapter.Id,

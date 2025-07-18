@@ -23,4 +23,5 @@ public sealed class GetCourseResponse
     public string? Language { get; set; } = default!;
     public int EstimatedDurationHours { get; set; } = 0;
     public int StudentsCount { get; set; } = 0;
+    public bool IsEnrolled { get; set; } = false;
 }

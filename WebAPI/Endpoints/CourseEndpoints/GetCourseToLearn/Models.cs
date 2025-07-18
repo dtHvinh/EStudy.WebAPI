@@ -10,6 +10,7 @@ public sealed class GetCourseToLearnResponse
     public int StudentCount { get; set; }
     public string Title { get; set; } = default!;
     public double AverageRating { get; set; }
+    public bool IsRated { get; set; }
     public List<GetCourseToLearnChapterResponse> Chapters { get; set; } = default!;
 }
 

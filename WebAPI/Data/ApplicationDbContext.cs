@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebAPI.Models._course;
 using WebAPI.Models._flashCard;
 using WebAPI.Models._others;
+using WebAPI.Models._payment;
 using WebAPI.Models._testExam;
 
 namespace WebAPI.Data;
@@ -18,7 +19,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Course> Courses { get; set; } = default!;
     public DbSet<CourseEnrollment> CourseEnrollments { get; set; } = default!;
     public DbSet<CourseLesson> Lessons { get; set; } = default!;
-    public DbSet<UserLessonNote> UserCourseNotes { get; set; } = default!;
+    public DbSet<UserLessonNote> LessonNotes { get; set; } = default!;
     public DbSet<LessonProgress> LessonProgresses { get; set; } = default!;
     public DbSet<CourseRating> CourseRatings { get; set; } = default!;
 
@@ -33,6 +34,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TestExam> TestExams { get; set; } = default!;
     public DbSet<TestSection> TestSections { get; set; } = default!;
     public DbSet<TestComment> TestComments { get; set; } = default!;
+
+    public DbSet<Transaction> Transactions { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
