@@ -21,12 +21,25 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCoursesRequest
     }
     public override async Task HandleAsync(GetCoursesRequest req, CancellationToken ct)
     {
-        var nameQuery = Query<string>("name", false);
+        var nameQuery = Query<string>("query", false);
+        var priceQuery = Query<string>("price", false);
 
         var courses = context.Courses.Where(e => e.IsPublished);
+
+        if (!string.IsNullOrEmpty(priceQuery) && priceQuery != "all")
+        {
+            if (priceQuery == "free")
+            {
+                courses = courses.Where(c => c.IsFree);
+            }
+            else if (priceQuery == "paid")
+            {
+                courses = courses.Where(c => !c.IsFree);
+            }
+        }
         if (!string.IsNullOrEmpty(nameQuery))
         {
-            courses = courses.Where(c => c.Title.Contains(nameQuery));
+            courses = courses.Where(c => c.SearchVector.Matches(EF.Functions.PhraseToTsQuery(nameQuery)));
         }
 
         var response = await courses

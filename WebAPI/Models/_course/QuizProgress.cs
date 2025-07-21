@@ -12,7 +12,7 @@ public class QuizProgress
 
     [ForeignKey(nameof(Quiz))]
     public int QuizId { get; set; }
-    public CourseLesson Quiz { get; set; } = default!;
+    public ChapterQuiz Quiz { get; set; } = default!;
 
     [ForeignKey(nameof(User))]
     public int UserId { get; set; }

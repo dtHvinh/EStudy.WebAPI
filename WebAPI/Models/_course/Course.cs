@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using NpgsqlTypes;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models._others;
 using WebAPI.Models.Contract;
 
@@ -21,6 +22,8 @@ public class Course : IBelongToUser<int>, IEntityWithTime<int>, IPurchasable<int
     public string? LearningObjectives { get; set; } // Line separated string of learning objectives
     public string? Language { get; set; } = "English";
     public int EstimatedDurationHours { get; set; } = 0;
+
+    public NpgsqlTsVector SearchVector { get; set; } = default!;
 
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }

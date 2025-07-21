@@ -26,6 +26,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ChapterQuiz> ChapterQuizzes { get; set; } = default!;
     public DbSet<ChapterQuizQuestion> ChapterQuizQuestions { get; set; } = default!;
     public DbSet<ChapterQuizQuestionOption> ChapterQuizQuestionOptions { get; set; } = default!;
+    public DbSet<QuizProgress> QuizProgresses { get; set; } = default!;
 
 
     public DbSet<FlashCard> FlashCards { get; set; } = default!;
@@ -107,6 +108,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
 
         builder.Entity<TestExam>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",  // Text search config
+                p => new { p.Title })  // Included properties
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
+
+        builder.Entity<Course>()
             .HasGeneratedTsVectorColumn(
                 p => p.SearchVector,
                 "english",  // Text search config

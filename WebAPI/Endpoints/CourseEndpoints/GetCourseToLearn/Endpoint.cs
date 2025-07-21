@@ -78,6 +78,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
                                 Title = q.Title,
                                 Description = q.Description,
                                 OrderIndex = q.OrderIndex,
+                                IsCompleted = q.QuizProgress.Any(clc => clc.UserId == userId),
                                 Questions = q.Questions.Select(qq => new GetCourseToLearnQuizQuestionResponse
                                 {
                                     Id = qq.Id,
