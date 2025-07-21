@@ -5,6 +5,7 @@ using WebAPI.Models._course;
 using WebAPI.Models._flashCard;
 using WebAPI.Models._others;
 using WebAPI.Models._payment;
+using WebAPI.Models._report;
 using WebAPI.Models._testExam;
 
 namespace WebAPI.Data;
@@ -22,6 +23,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<UserLessonNote> LessonNotes { get; set; } = default!;
     public DbSet<LessonProgress> LessonProgresses { get; set; } = default!;
     public DbSet<CourseRating> CourseRatings { get; set; } = default!;
+    public DbSet<ChapterQuiz> ChapterQuizzes { get; set; } = default!;
+    public DbSet<ChapterQuizQuestion> ChapterQuizQuestions { get; set; } = default!;
+    public DbSet<ChapterQuizQuestionOption> ChapterQuizQuestionOptions { get; set; } = default!;
+
 
     public DbSet<FlashCard> FlashCards { get; set; } = default!;
     public DbSet<FlashCardSet> FlashCardSets { get; set; } = default!;
@@ -36,6 +41,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<TestComment> TestComments { get; set; } = default!;
 
     public DbSet<Transaction> Transactions { get; set; } = default!;
+
+    public DbSet<ReportReason> ReportReasons { get; set; } = default!;
+    public DbSet<Report> Reports { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -68,6 +76,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 new Role { Id = 2, Name = "Student", NormalizedName = "STUDENT" },
                 new Role { Id = 3, Name = "Instructor", NormalizedName = "INSTRUCTOR" }
             ]);
+
+        builder.Entity<ReportReason>().HasData(
+            new { Id = 1, Title = "Inappropriate Content", Description = "Offensive or adult material." },
+            new { Id = 2, Title = "Spam or Scam", Description = "Promotes irrelevant or misleading content." },
+            new { Id = 3, Title = "Misinformation", Description = "Incorrect or misleading educational information." },
+            new { Id = 4, Title = "Harassment or Abuse", Description = "Bullying or abusive behavior." },
+            new { Id = 5, Title = "Copyright Infringement", Description = "Violates intellectual property rights." },
+            new { Id = 6, Title = "Violent or Dangerous Content", Description = "Promotes harm or violence." },
+            new { Id = 7, Title = "Plagiarism", Description = "Copied from another source without citation." },
+            new { Id = 8, Title = "Broken or Unusable Content", Description = "Content cannot be accessed or is broken." },
+            new { Id = 9, Title = "Off-topic", Description = "Not relevant to the subject matter." },
+            new { Id = 10, Title = "Other", Description = "Other reason not listed." }
+        );
 
         builder.Entity<FlashCard>()
             .HasGeneratedTsVectorColumn(

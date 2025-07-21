@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250718115604_AddReport")]
+    partial class AddReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,81 +39,6 @@ namespace WebAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChapterId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrderIndex")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChapterId");
-
-                    b.ToTable("ChapterQuizzes");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChapterId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChapterId");
-
-                    b.ToTable("ChapterQuizQuestions");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestionOption", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ChapterQuizQuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChapterQuizQuestionId");
-
-                    b.ToTable("ChapterQuizQuestionOptions");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.Course", b =>
@@ -1091,39 +1019,6 @@ namespace WebAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
-                {
-                    b.HasOne("WebAPI.Models._course.CourseChapter", "Chapter")
-                        .WithMany("Quizzes")
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chapter");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestion", b =>
-                {
-                    b.HasOne("WebAPI.Models._course.ChapterQuiz", "Chapter")
-                        .WithMany("Questions")
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chapter");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestionOption", b =>
-                {
-                    b.HasOne("WebAPI.Models._course.ChapterQuizQuestion", "ChapterQuizQuestion")
-                        .WithMany("Options")
-                        .HasForeignKey("ChapterQuizQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChapterQuizQuestion");
-                });
-
             modelBuilder.Entity("WebAPI.Models._course.Course", b =>
                 {
                     b.HasOne("WebAPI.Models._others.User", "Author")
@@ -1439,16 +1334,6 @@ namespace WebAPI.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestion", b =>
-                {
-                    b.Navigation("Options");
-                });
-
             modelBuilder.Entity("WebAPI.Models._course.Course", b =>
                 {
                     b.Navigation("Chapters");
@@ -1461,8 +1346,6 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models._course.CourseChapter", b =>
                 {
                     b.Navigation("Lessons");
-
-                    b.Navigation("Quizzes");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.CourseLesson", b =>

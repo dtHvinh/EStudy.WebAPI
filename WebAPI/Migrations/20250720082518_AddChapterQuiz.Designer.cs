@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250720082518_AddChapterQuiz")]
+    partial class AddChapterQuiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,6 +53,7 @@ namespace WebAPI.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("OrderIndex")
@@ -74,7 +78,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChapterId")
+                    b.Property<int?>("ChapterQuizId")
                         .HasColumnType("integer");
 
                     b.Property<string>("QuestionText")
@@ -83,7 +87,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChapterId");
+                    b.HasIndex("ChapterQuizId");
 
                     b.ToTable("ChapterQuizQuestions");
                 });
@@ -96,7 +100,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChapterQuizQuestionId")
+                    b.Property<int?>("ChapterQuizQuestionId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsCorrect")
@@ -1104,24 +1108,16 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestion", b =>
                 {
-                    b.HasOne("WebAPI.Models._course.ChapterQuiz", "Chapter")
+                    b.HasOne("WebAPI.Models._course.ChapterQuiz", null)
                         .WithMany("Questions")
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chapter");
+                        .HasForeignKey("ChapterQuizId");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestionOption", b =>
                 {
-                    b.HasOne("WebAPI.Models._course.ChapterQuizQuestion", "ChapterQuizQuestion")
+                    b.HasOne("WebAPI.Models._course.ChapterQuizQuestion", null)
                         .WithMany("Options")
-                        .HasForeignKey("ChapterQuizQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChapterQuizQuestion");
+                        .HasForeignKey("ChapterQuizQuestionId");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.Course", b =>

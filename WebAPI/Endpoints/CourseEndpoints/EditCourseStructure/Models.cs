@@ -1,6 +1,6 @@
 ﻿namespace WebAPI.Endpoints.CourseEndpoints.EditCourseStructure;
 
-public class CourseChapterRequest
+public sealed class CourseChapterRequest
 {
     public int Id { get; set; }
     public string Title { get; set; } = default!;
@@ -8,9 +8,33 @@ public class CourseChapterRequest
     public int OrderIndex { get; set; }
     public bool IsPublished { get; set; }
     public List<CourseLessonRequest> Lessons { get; set; } = default!;
+    public List<CourseQuizRequest> Quizzes { get; set; } = default!;
 }
 
-public class CourseLessonRequest
+public sealed class CourseQuizRequest
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = default!;
+    public string? Description { get; set; }
+    public int OrderIndex { get; set; }
+    public List<CourseQuizQuestionRequest> Questions { get; set; } = default!;
+}
+
+public sealed class CourseQuizQuestionRequest
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = default!;
+    public List<CourseQuizQuestionOptionRequest> Options { get; set; } = default!;
+}
+
+public sealed class CourseQuizQuestionOptionRequest
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = default!;
+    public bool IsCorrect { get; set; } = false;
+}
+
+public sealed class CourseLessonRequest
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
@@ -23,7 +47,7 @@ public class CourseLessonRequest
     public string? VideoUrl { get; set; }
 }
 
-public class EditCourseStructureRequest
+public sealed class EditCourseStructureRequest
 {
     public int CourseId { get; set; }
     public bool IsPublished { get; set; }
@@ -41,7 +65,7 @@ public class EditCourseStructureRequest
     public List<CourseChapterRequest> Chapters { get; set; } = default!;
 }
 
-public class EditCourseStructureResponse
+public sealed class EditCourseStructureResponse
 {
     public int CourseId { get; set; }
 }

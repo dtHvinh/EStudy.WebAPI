@@ -30,6 +30,11 @@ public class Endpoint(ApplicationDbContext context)
             .Include(e => e.Chapters)
             .ThenInclude(e => e.Lessons)
             .ThenInclude(e => e.Attachments)
+            .Include(e => e.Chapters)
+            .ThenInclude(e => e.Quizzes)
+            .ThenInclude(e => e.Questions)
+            .ThenInclude(e => e.Options)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(e => e.Id == request.CourseId, ct);
 
         if (course is null)
@@ -55,6 +60,24 @@ public class Endpoint(ApplicationDbContext context)
                 Description = chapter.Description,
                 OrderIndex = chapter.OrderIndex,
                 IsPublished = chapter.IsPublished,
+                Quizzes = [.. chapter.Quizzes.Select(quiz => new GetCourseStructureQuizResponse
+                {
+                    Id = quiz.Id,
+                    Title = quiz.Title,
+                    Description = quiz.Description,
+                    OrderIndex = quiz.OrderIndex,
+                    Questions = [.. quiz.Questions.Select(question => new GetCourseStructureQuizQuestionResponse
+                    {
+                        Id = question.Id,
+                        Text = question.QuestionText,
+                        Options = [.. question.Options.Select(option => new GetCourseStructureQuizQuestionOptionResponse
+                        {
+                            Id = option.Id,
+                            Text = option.Text,
+                            IsCorrect = option.IsCorrect
+                        })]
+                    })]
+                })],
                 Lessons = [.. chapter.Lessons.Select(lesson => new GetCourseStructureLessonResponse
                 {
                     Id = lesson.Id,
@@ -66,7 +89,7 @@ public class Endpoint(ApplicationDbContext context)
                     OrderIndex = lesson.OrderIndex,
                     TranscriptUrl = lesson.TranscriptUrl,
                     VideoUrl = lesson.VideoUrl
-                })]
+                })],
             })]
         };
 

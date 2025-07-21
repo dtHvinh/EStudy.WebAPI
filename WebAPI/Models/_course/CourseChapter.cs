@@ -17,4 +17,5 @@ public class CourseChapter : IOrderedItem
     public Course Course { get; set; } = default!;
 
     public ICollection<CourseLesson> Lessons { get; set; } = default!;
+    public ICollection<ChapterQuiz> Quizzes { get; set; } = default!;
 }

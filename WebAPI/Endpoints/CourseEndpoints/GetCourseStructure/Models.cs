@@ -12,7 +12,7 @@ public sealed class GetCourseStructureResponse
     public List<GetCourseStructureChapterResponse> Chapters { get; set; } = default!;
 }
 
-public class GetCourseStructureChapterResponse
+public sealed class GetCourseStructureChapterResponse
 {
     public int Id { get; set; }
     public string Title { get; set; } = default!;
@@ -20,9 +20,10 @@ public class GetCourseStructureChapterResponse
     public int OrderIndex { get; set; }
     public bool IsPublished { get; set; }
     public List<GetCourseStructureLessonResponse> Lessons { get; set; } = default!;
+    public List<GetCourseStructureQuizResponse> Quizzes { get; set; } = default!;
 }
 
-public class GetCourseStructureLessonResponse
+public sealed class GetCourseStructureLessonResponse
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
@@ -33,4 +34,27 @@ public class GetCourseStructureLessonResponse
     public int OrderIndex { get; set; }
     public string? TranscriptUrl { get; set; }
     public string? VideoUrl { get; set; }
+}
+
+public sealed class GetCourseStructureQuizResponse
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = default!;
+    public string? Description { get; set; }
+    public int OrderIndex { get; set; }
+    public List<GetCourseStructureQuizQuestionResponse> Questions { get; set; } = default!;
+}
+
+public sealed class GetCourseStructureQuizQuestionResponse
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = default!;
+    public List<GetCourseStructureQuizQuestionOptionResponse> Options { get; set; } = default!;
+}
+
+public sealed class GetCourseStructureQuizQuestionOptionResponse
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = default!;
+    public bool IsCorrect { get; set; } = false;
 }

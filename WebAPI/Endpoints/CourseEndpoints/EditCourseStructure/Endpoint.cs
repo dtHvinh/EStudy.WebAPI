@@ -30,6 +30,10 @@ public class Endpoint(ApplicationDbContext context)
             .Include(e => e.Chapters)
             .ThenInclude(e => e.Lessons)
             .ThenInclude(e => e.Attachments)
+            .Include(e => e.Chapters)
+            .ThenInclude(e => e.Quizzes)
+            .ThenInclude(e => e.Questions)
+            .ThenInclude(e => e.Options)
             .FirstOrDefaultAsync(e => e.Id == request.CourseId, cancellationToken);
 
         if (course == null)
@@ -62,6 +66,24 @@ public class Endpoint(ApplicationDbContext context)
             Description = chapter.Description,
             OrderIndex = chapter.OrderIndex,
             IsPublished = chapter.IsPublished,
+            Quizzes = [.. chapter.Quizzes.Select(quiz => new ChapterQuiz
+            {
+                Id = quiz.Id,
+                Title = quiz.Title,
+                Description = quiz.Description,
+                OrderIndex = quiz.OrderIndex,
+                Questions = [.. quiz.Questions.Select(question => new ChapterQuizQuestion
+                {
+                    Id = question.Id,
+                    QuestionText = question.Text,
+                    Options = [.. question.Options.Select(option => new ChapterQuizQuestionOption
+                    {
+                        Id = option.Id,
+                        Text = option.Text,
+                        IsCorrect = option.IsCorrect
+                    })]
+                })]
+            })],
             Lessons = [.. chapter.Lessons.Select(lesson => new CourseLesson
             {
                 Id = lesson.Id,
