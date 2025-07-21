@@ -69,8 +69,26 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
                                         {
                                             Content = n.Content
                                         }).FirstOrDefault(),
-                                IsCompleted = _context.LessonProgresses
-                                    .Any(clc => clc.UserId == userId && clc.LessonId == lesson.Id)
+                                IsCompleted = lesson.LessonProgress.Any(clc => clc.UserId == userId)
+                            }).ToList(),
+                        Quizzes = chapter.Quizzes
+                            .Select(q => new GetCourseToLearnQuizResponse
+                            {
+                                Id = q.Id,
+                                Title = q.Title,
+                                Description = q.Description,
+                                OrderIndex = q.OrderIndex,
+                                Questions = q.Questions.Select(qq => new GetCourseToLearnQuizQuestionResponse
+                                {
+                                    Id = qq.Id,
+                                    Text = qq.QuestionText,
+                                    Options = qq.Options.Select(o => new GetCourseToLearnQuizQuestionOptionResponse
+                                    {
+                                        Id = o.Id,
+                                        Text = o.Text,
+                                        IsCorrect = o.IsCorrect
+                                    }).ToList()
+                                }).ToList()
                             }).ToList()
                     }).ToList()
             }).FirstOrDefaultAsync(ct);
@@ -84,3 +102,4 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
         await SendOkAsync(course, ct);
     }
 }
+

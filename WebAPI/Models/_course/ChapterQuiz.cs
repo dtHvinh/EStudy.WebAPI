@@ -15,4 +15,5 @@ public class ChapterQuiz
     public CourseChapter Chapter { get; set; } = default!;
 
     public ICollection<ChapterQuizQuestion> Questions { get; set; } = default!;
+    public ICollection<QuizProgress> QuizProgress { get; set; } = default!;
 }

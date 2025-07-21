@@ -14,6 +14,30 @@ public sealed class GetCourseToLearnResponse
     public List<GetCourseToLearnChapterResponse> Chapters { get; set; } = default!;
 }
 
+public sealed class GetCourseToLearnQuizResponse
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = default!;
+    public string? Description { get; set; }
+    public int OrderIndex { get; set; }
+    public bool IsCompleted { get; set; } = false;
+    public List<GetCourseToLearnQuizQuestionResponse> Questions { get; set; } = default!;
+}
+
+public sealed class GetCourseToLearnQuizQuestionResponse
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = default!;
+    public List<GetCourseToLearnQuizQuestionOptionResponse> Options { get; set; } = default!;
+}
+
+public sealed class GetCourseToLearnQuizQuestionOptionResponse
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = default!;
+    public bool IsCorrect { get; set; } = false;
+}
+
 public class GetCourseToLearnChapterResponse
 {
     public int Id { get; set; }
@@ -23,6 +47,7 @@ public class GetCourseToLearnChapterResponse
     public bool IsPublished { get; set; }
     public int TotalMinutes { get; set; }
     public List<GetCourseToLearnLessonResponse> Lessons { get; set; } = default!;
+    public List<GetCourseToLearnQuizResponse> Quizzes { get; set; } = default!;
 }
 
 public class GetCourseToLearnLessonResponse
