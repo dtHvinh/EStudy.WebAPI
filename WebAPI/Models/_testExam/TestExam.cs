@@ -22,4 +22,5 @@ public class TestExam
     public ICollection<TestSection> Sections { get; set; } = default!;
     public ICollection<TestComment> Comments { get; set; } = default!;
     public ICollection<TestAttempt> Attempts { get; set; } = default!;
+    public ICollection<TestCollection> Collections { get; set; } = default!;
 }

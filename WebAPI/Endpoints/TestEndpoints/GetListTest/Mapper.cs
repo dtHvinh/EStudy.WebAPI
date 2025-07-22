@@ -19,7 +19,8 @@ public static partial class Mapper
                 AttemptCount = x.Attempts.Count,
                 QuestionCount = x.Sections.Sum(e => e.Questions.Count),
                 SectionCount = x.Sections.Count,
-                CommentCount = x.Comments.Count
+                CommentCount = x.Comments.Count,
+                AuthorName = x.Creator.Name,
             }
         );
     }

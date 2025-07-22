@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using NpgsqlTypes;
+using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models._others;
 using WebAPI.Models.Contract;
 
@@ -14,4 +15,8 @@ public class TestCollection : IBelongToUser<int>
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }
     public User Author { get; set; } = default!;
+
+    public NpgsqlTsVector SearchVector { get; set; } = default!;
+
+    public ICollection<TestExam> Tests { get; set; } = default!;
 }

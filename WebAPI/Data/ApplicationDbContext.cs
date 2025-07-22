@@ -114,6 +114,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 "english",  // Text search config
                 p => new { p.Title })  // Included properties
             .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN");
+
+        builder.Entity<TestCollection>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",  // Text search config
+                p => new { p.Name })  // Included properties
+            .HasIndex(p => p.SearchVector)
             .HasMethod("GIN"); // Index method on the search vector (GIN or GIST)
 
         builder.Entity<TestExam>()

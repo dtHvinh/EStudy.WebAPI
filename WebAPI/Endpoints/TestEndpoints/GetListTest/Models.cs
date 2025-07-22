@@ -13,6 +13,7 @@ public sealed class GetListTestResponse
     public required string Title { get; set; }
     public string? Description { get; set; }
     public int Duration { get; set; }
+    public string AuthorName { get; set; } = default!;
 
     public int SectionCount { get; set; }
     public int AttemptCount { get; set; }

@@ -1,7 +1,6 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
-using WebAPI.Endpoints.TestEndpoints.GetTest;
 
 namespace WebAPI.Endpoints.TestEndpoints.GetListTest;
 
@@ -15,7 +14,6 @@ public class Endpoint(ApplicationDbContext context)
         Get("");
         Group<TestGroup>();
         Description(d => d.WithName("Get test").WithDescription("Get list of test with pagination"));
-
     }
 
     public override async Task HandleAsync(GetListTestRequest req, CancellationToken ct)
