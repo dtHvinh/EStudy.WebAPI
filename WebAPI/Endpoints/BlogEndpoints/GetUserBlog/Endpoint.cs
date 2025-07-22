@@ -30,6 +30,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
 
         var blogs = await _context.Blogs
             .Where(b => b.AuthorId == authorId)
+            .WhereContentIsValid()
             .OrderByDescending(b => b.CreationDate)
             .Skip(skip)
             .Take(req.PageSize)

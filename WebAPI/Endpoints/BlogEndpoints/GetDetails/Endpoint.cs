@@ -1,13 +1,15 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Services;
 using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.BlogEndpoints.GetDetails;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<GetBlogDetailsRequest, GetBlogDetailsResponse>
+public class Endpoint(ApplicationDbContext context, CurrentUserService currentUserService) : Endpoint<GetBlogDetailsRequest, GetBlogDetailsResponse>
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly CurrentUserService _currentUserService = currentUserService;
 
     public override void Configure()
     {
@@ -32,7 +34,12 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetBlogDetailsReq
             return;
         }
 
-        var blog = await _context.Blogs
+        var query = _context.Blogs.AsQueryable();
+
+        if (await _currentUserService.IsInRoleAsync("Admin") is false)
+            query = query.WhereContentIsValid();
+
+        var blog = await query
             .Include(e => e.Author)
             .Where(e => e.Id == req.Id)
             .FirstOrDefaultAsync(ct);

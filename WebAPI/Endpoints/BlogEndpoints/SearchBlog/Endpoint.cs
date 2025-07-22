@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Endpoints.BlogEndpoints.GetUserBlog;
+using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.BlogEndpoints.SearchBlog;
 
@@ -21,6 +22,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetUserBlogReques
         var q = Query<string>("q", false);
 
         var query = _context.Blogs
+            .WhereContentIsValid()
             .Include(e => e.Author)
             .AsQueryable();
 

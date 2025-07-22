@@ -19,6 +19,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<MarkLessonAsCompl
     public override async Task HandleAsync(MarkLessonAsCompletedRequest request, CancellationToken ct)
     {
         var lesson = await _context.Lessons
+            .Where(e => e.Chapter.Course.Enrollments.Any(e => e.UserId == int.Parse(this.RetrieveUserId())))
             .FirstOrDefaultAsync(e => e.Id == request.LessonId, ct);
 
         if (lesson == null)

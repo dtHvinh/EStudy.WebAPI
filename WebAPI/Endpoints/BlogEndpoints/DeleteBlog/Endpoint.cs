@@ -17,7 +17,10 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<DeleteBlogRequest
 
     public override async Task HandleAsync(DeleteBlogRequest req, CancellationToken ct)
     {
-        var blog = await _context.Blogs.Include(e => e.Author).FirstOrDefaultAsync(e => e.Id == req.Id, ct);
+        var blog = await _context.Blogs
+            .WhereContentIsValid()
+            .Include(e => e.Author)
+            .FirstOrDefaultAsync(e => e.Id == req.Id, ct);
 
         if (blog is null)
         {

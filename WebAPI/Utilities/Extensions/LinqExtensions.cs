@@ -1,6 +1,7 @@
 ﻿
 using System.Linq.Expressions;
 using System.Reflection;
+using WebAPI.Models.Contract;
 
 namespace WebAPI.Utilities.Extensions;
 
@@ -81,5 +82,11 @@ public static class LinqExtensions
         if (pageNumber < 1 || pageSize < 1)
             throw new ArgumentOutOfRangeException("Page number and size must be greater than zero.");
         return query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+    }
+
+    public static IQueryable<TSource> WhereContentIsValid<TSource>(
+        this IQueryable<TSource> source) where TSource : IContentValidatable
+    {
+        return source.Where(item => !item.IsHidden);
     }
 }

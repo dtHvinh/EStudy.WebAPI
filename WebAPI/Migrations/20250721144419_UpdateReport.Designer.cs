@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using WebAPI.Data;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250721144419_UpdateReport")]
+    partial class UpdateReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -551,9 +554,6 @@ namespace WebAPI.Migrations
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsHidden")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTimeOffset?>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -751,11 +751,14 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models._report.Report", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TargetId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("timestamp with time zone");
@@ -767,27 +770,9 @@ namespace WebAPI.Migrations
                     b.Property<int>("ReportReasonId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ReportStatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TargetId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "Type", "TargetId");
 
                     b.HasIndex("ReportReasonId");
-
-                    b.HasIndex("ReportStatusId");
-
-                    b.HasIndex("UserId", "Type", "TargetId")
-                        .IsUnique();
 
                     b.ToTable("Reports");
                 });
@@ -871,45 +856,6 @@ namespace WebAPI.Migrations
                             Id = 10,
                             Description = "Other reason not listed.",
                             Title = "Other"
-                        });
-                });
-
-            modelBuilder.Entity("WebAPI.Models._report.ReportStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReportStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "UnderReview"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Rejected"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Resolved"
                         });
                 });
 
@@ -1401,12 +1347,6 @@ namespace WebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Models._report.ReportStatus", "ReportStatus")
-                        .WithMany()
-                        .HasForeignKey("ReportStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("WebAPI.Models._others.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1414,8 +1354,6 @@ namespace WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("ReportReason");
-
-                    b.Navigation("ReportStatus");
 
                     b.Navigation("User");
                 });

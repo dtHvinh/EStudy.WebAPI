@@ -1,13 +1,15 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Services;
 using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.CourseEndpoints.GetCourseToLearn;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnRequest, GetCourseToLearnResponse>
+public class Endpoint(ApplicationDbContext context, CurrentUserService currentUserService) : Endpoint<GetCourseToLearnRequest, GetCourseToLearnResponse>
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly CurrentUserService _currentUserService = currentUserService;
 
     public override void Configure()
     {
@@ -21,10 +23,13 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseToLearnR
         var isEnrolled = _context.CourseEnrollments
         .Any(e => e.CourseId == req.CourseId && e.UserId == int.Parse(this.RetrieveUserId()));
 
-        if (!isEnrolled)
+        if (!await _currentUserService.IsInRoleAsync("Admin"))
         {
-            await SendUnauthorizedAsync(ct);
-            return;
+            if (!isEnrolled)
+            {
+                await SendUnauthorizedAsync(ct);
+                return;
+            }
         }
 
         var userId = int.Parse(this.RetrieveUserId());

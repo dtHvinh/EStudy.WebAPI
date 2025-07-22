@@ -45,6 +45,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<ReportReason> ReportReasons { get; set; } = default!;
     public DbSet<Report> Reports { get; set; } = default!;
+    public DbSet<ReportStatus> ReportStatuses { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -76,6 +77,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 new Role { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
                 new Role { Id = 2, Name = "Student", NormalizedName = "STUDENT" },
                 new Role { Id = 3, Name = "Instructor", NormalizedName = "INSTRUCTOR" }
+            ]);
+
+        builder.Entity<ReportStatus>()
+            .HasData([
+                new ReportStatus { Id = 1, Name = Constants.ReportStatuses.Pending },
+                new ReportStatus { Id = 2, Name = Constants.ReportStatuses.UnderReview },
+                new ReportStatus { Id = 3, Name = Constants.ReportStatuses.Rejected },
+                new ReportStatus { Id = 4, Name = Constants.ReportStatuses.Resolved },
             ]);
 
         builder.Entity<ReportReason>().HasData(

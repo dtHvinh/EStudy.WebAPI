@@ -18,6 +18,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<UpdateBlogRequest
     public override async Task HandleAsync(UpdateBlogRequest req, CancellationToken ct)
     {
         var blog = await _context.Blogs
+            .WhereContentIsValid()
             .Include(e => e.Author)
             .FirstOrDefaultAsync(e => e.Id == req.Id, cancellationToken: ct);
 
