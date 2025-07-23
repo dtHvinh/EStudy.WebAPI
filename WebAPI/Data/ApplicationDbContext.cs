@@ -116,6 +116,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasIndex(p => p.SearchVector)
             .HasMethod("GIN");
 
+        builder.Entity<User>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",
+                p => new { p.Name })
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN");
+
         builder.Entity<TestCollection>()
             .HasGeneratedTsVectorColumn(
                 p => p.SearchVector,

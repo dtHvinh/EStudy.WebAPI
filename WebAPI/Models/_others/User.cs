@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using NpgsqlTypes;
 using System.ComponentModel.DataAnnotations.Schema;
 using WebAPI.Models._course;
 using WebAPI.Models._flashCard;
@@ -13,9 +14,11 @@ public class User : IdentityUser<int>
     public DateTimeOffset CreationDate { get; set; }
     public bool IsOnBoarded { get; set; }
     public string? Bio { get; set; }
-    public int WarningsCount { get; set; }
+    public int WarningCount { get; set; }
 
     public string RefreshToken { get; set; } = string.Empty;
+
+    public NpgsqlTsVector SearchVector { get; set; } = default!;
 
     public ICollection<Blog> Blogs { get; set; } = default!;
     public ICollection<FlashCardSet> FlashCardSets { get; set; } = default!;
