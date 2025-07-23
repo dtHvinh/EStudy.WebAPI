@@ -5,6 +5,8 @@ namespace WebAPI.Services;
 
 public interface IJwtService
 {
+    string GenerateRefreshToken();
+
     /// <summary>
     /// Generates a JWT token for the specified user
     /// </summary>

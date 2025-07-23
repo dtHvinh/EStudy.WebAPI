@@ -27,7 +27,7 @@ public class Endpoint(ApplicationDbContext context, CurrentUserService currentUs
         {
             if (!isEnrolled)
             {
-                await SendUnauthorizedAsync(ct);
+                ThrowError("You are not enrolled in this course.", 403);
                 return;
             }
         }

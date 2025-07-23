@@ -33,7 +33,12 @@ internal class Endpoint(UserManager<User> userManager, IJwtService jwtService)
             ThrowError("Password is incorrect");
 
         var token = _jwtService.GenerateToken(user);
+        var rt = _jwtService.GenerateRefreshToken();
 
-        await SendAsync(new LoginResponse(token), cancellation: ct);
+        user.RefreshToken = rt;
+
+        await _userManager.UpdateAsync(user);
+
+        await SendAsync(new LoginResponse(token, rt), cancellation: ct);
     }
 }

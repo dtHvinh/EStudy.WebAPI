@@ -21,4 +21,4 @@ public sealed class LoginRequest
     }
 }
 
-public sealed record LoginResponse(string AccessToken);
+public sealed record LoginResponse(string AccessToken, string RefreshToken);

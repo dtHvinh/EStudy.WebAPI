@@ -41,11 +41,12 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("Default");
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("Default");
 
 app.UseDefaultExceptionHandler().UseFastEndpoints(c =>
 {

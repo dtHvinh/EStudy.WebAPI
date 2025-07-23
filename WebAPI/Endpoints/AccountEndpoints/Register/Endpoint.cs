@@ -28,6 +28,11 @@ internal class Endpoint(UserManager<User> userManager, IJwtService jwtService)
         if (!createUserResult.Succeeded)
             ThrowError(createUserResult.Errors.FirstOrDefault()?.Description ?? "Failed to create user");
 
-        await SendOkAsync(new(_jwtService.GenerateToken(newUser)), ct);
+        var rt = _jwtService.GenerateRefreshToken();
+        newUser.RefreshToken = rt;
+
+        await _userManager.UpdateAsync(newUser);
+
+        await SendOkAsync(new(_jwtService.GenerateToken(newUser), rt), ct);
     }
 }

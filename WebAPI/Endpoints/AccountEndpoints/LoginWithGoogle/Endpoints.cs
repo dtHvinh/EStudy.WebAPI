@@ -48,17 +48,29 @@ public class Endpoints(UserManager<User> userManager, IJwtService jwtService, IH
 
         if (user is null)
         {
-            var token = await RegisterAndReturnToken(response);
-            await SendOkAsync(new LoginResponse(token), ct);
+            var (newUser, token) = await RegisterAndReturnToken(response);
+
+            var rt = _jwtService.GenerateRefreshToken();
+            newUser.RefreshToken = rt;
+
+            await _userManager.UpdateAsync(newUser);
+
+            await SendOkAsync(new LoginResponse(token, rt), ct);
         }
         else
         {
             var token = _jwtService.GenerateToken(user);
-            await SendOkAsync(new LoginResponse(token), ct);
+
+            var rt = _jwtService.GenerateRefreshToken();
+            user.RefreshToken = rt;
+
+            await _userManager.UpdateAsync(user);
+
+            await SendOkAsync(new LoginResponse(token, rt), ct);
         }
     }
 
-    private async Task<string> RegisterAndReturnToken(GoogleUserInfoResponse response)
+    private async Task<(User, string)> RegisterAndReturnToken(GoogleUserInfoResponse response)
     {
         var user = response.ToUser();
 
@@ -66,6 +78,6 @@ public class Endpoints(UserManager<User> userManager, IJwtService jwtService, IH
         if (!createUserResult.Succeeded)
             ThrowError(createUserResult.Errors.FirstOrDefault()?.Description ?? "Failed to create user");
         var token = _jwtService.GenerateToken(user);
-        return token;
+        return (user, token);
     }
 }

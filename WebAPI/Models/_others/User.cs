@@ -13,6 +13,9 @@ public class User : IdentityUser<int>
     public DateTimeOffset CreationDate { get; set; }
     public bool IsOnBoarded { get; set; }
     public string? Bio { get; set; }
+    public int WarningsCount { get; set; }
+
+    public string RefreshToken { get; set; } = string.Empty;
 
     public ICollection<Blog> Blogs { get; set; } = default!;
     public ICollection<FlashCardSet> FlashCardSets { get; set; } = default!;

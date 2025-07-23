@@ -27,4 +27,4 @@ public sealed class RegisterRequest
     }
 }
 
-public sealed record RegisterResponse(string AccessToken);
+public sealed record RegisterResponse(string AccessToken, string RefreshToken);
