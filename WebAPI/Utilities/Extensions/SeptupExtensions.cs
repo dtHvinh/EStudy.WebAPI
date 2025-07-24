@@ -5,6 +5,7 @@ using Minio;
 using Stripe;
 using System.Text;
 using WebAPI.Data;
+using WebAPI.Middlewares.Contract;
 using WebAPI.Models._others;
 using WebAPI.Services;
 
@@ -140,5 +141,21 @@ public static class SeptupExtensions
         StripeConfiguration.ApiKey = Config["Stripe:ApiKey"];
 
         return services;
+    }
+
+    public static IApplicationBuilder UseApplicationMiddlewares(
+    this IApplicationBuilder builder)
+    {
+        var middlewares = typeof(SeptupExtensions).Assembly
+            .GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && typeof(IApplicationMiddleware).IsAssignableFrom(t))
+            .ToList();
+
+        foreach (var middleware in middlewares)
+        {
+            builder.UseMiddleware(middleware);
+        }
+
+        return builder;
     }
 }

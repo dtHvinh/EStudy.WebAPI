@@ -11,7 +11,9 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Services(services)
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.File("logs/webapi-.log", rollingInterval: RollingInterval.Day));
+    .WriteTo.File("logs/webapi-.log",
+                   rollingInterval: RollingInterval.Day,
+                   retainedFileCountLimit: 7));
 
 SeptupExtensions.Config = builder.Configuration;
 
@@ -27,6 +29,11 @@ builder.Services.ConfigureDatabase();
 builder.Services.ConfigureJwtAuthentication();
 builder.Services.RegisterServices();
 builder.Services.RegisterPayment();
+builder.Services.AddLogging(cf =>
+{
+    cf.ClearProviders();
+    cf.AddSerilog(dispose: true);
+});
 builder.WebHost.ConfigureKestrel(o =>
 {
     o.Limits.MaxRequestBodySize = 700_741_824;
@@ -47,6 +54,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseApplicationMiddlewares();
 
 app.UseDefaultExceptionHandler().UseFastEndpoints(c =>
 {

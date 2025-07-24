@@ -58,6 +58,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .Ignore<IdentityRoleClaim<int>>()
             .Ignore<IdentityUserClaim<int>>();
 
+
         builder.Entity<User>()
             .ToTable("Users")
             .Ignore(e => e.ConcurrencyStamp)
