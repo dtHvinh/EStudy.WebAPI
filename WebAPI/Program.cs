@@ -23,7 +23,8 @@ builder.Services.AddFastEndpoints(cf =>
 {
     cf.Filter = e => e.GetCustomAttribute<ObsoleteAttribute>() is null;
 });
-
+builder.Services.AddCaching();
+builder.Services.AddJobs();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureDatabase();
 builder.Services.ConfigureJwtAuthentication();

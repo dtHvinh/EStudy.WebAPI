@@ -1,15 +1,15 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
-using WebAPI.Services;
+using WebAPI.Services.Contract;
 using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.BlogEndpoints.GetDetails;
 
-public class Endpoint(ApplicationDbContext context, CurrentUserService currentUserService) : Endpoint<GetBlogDetailsRequest, GetBlogDetailsResponse>
+public class Endpoint(ApplicationDbContext context, ICurrentUserService currentUserService) : Endpoint<GetBlogDetailsRequest, GetBlogDetailsResponse>
 {
     private readonly ApplicationDbContext _context = context;
-    private readonly CurrentUserService _currentUserService = currentUserService;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public override void Configure()
     {

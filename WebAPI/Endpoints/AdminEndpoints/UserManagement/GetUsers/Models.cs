@@ -5,7 +5,7 @@ namespace WebAPI.Endpoints.AdminEndpoints.UserManagement.GetUsers;
 public sealed class AdminGetUsersRequest : PaginationParams
 {
     public string? Name { get; set; }
-    public string Role { get; set; }
+    public string? Role { get; set; }
 }
 
 public sealed class AdminGetUserResponse

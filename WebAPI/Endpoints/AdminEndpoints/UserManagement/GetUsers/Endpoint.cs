@@ -1,14 +1,16 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Services.Contract;
 using WebAPI.Utilities.Extensions;
 using WebAPI.Utilities.Pagination;
 
 namespace WebAPI.Endpoints.AdminEndpoints.UserManagement.GetUsers;
 
-public class Endpoint(ApplicationDbContext context) : Endpoint<AdminGetUsersRequest, PagedResponse<AdminGetUserResponse>>
+public class Endpoint(ApplicationDbContext context, IBanService banService) : Endpoint<AdminGetUsersRequest, PagedResponse<AdminGetUserResponse>>
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly IBanService _banService = banService;
 
     public override void Configure()
     {
@@ -51,7 +53,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<AdminGetUsersRequ
                         WarningCount = u.WarningCount,
                         Email = u.Email!,
                         ProfilePicture = u.ProfilePicture!,
-                        Status = "Active"
+                        Status = _banService.IsUserBannedAsync(u.Id.ToString()).Result ? "Banned" : "Active"
                     })
                     .Paginate(req.Page, req.PageSize)
                     .ToListAsync(ct);

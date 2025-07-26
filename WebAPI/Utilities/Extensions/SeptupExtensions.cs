@@ -2,8 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Minio;
+using Quartz;
+using Quartz.AspNetCore;
+using StackExchange.Redis;
 using Stripe;
 using System.Text;
+using WebAPI.BackgroundJobs;
 using WebAPI.Data;
 using WebAPI.Middlewares.Contract;
 using WebAPI.Models._others;
@@ -31,7 +35,7 @@ public static class SeptupExtensions
             //options.EnableSensitiveDataLogging();
         });
 
-        services.AddIdentity<User, Role>(options =>
+        services.AddIdentity<User, Models._others.Role>(options =>
         {
             options.User.RequireUniqueEmail = false;
             options.Password.RequireDigit = false;
@@ -143,8 +147,33 @@ public static class SeptupExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseApplicationMiddlewares(
-    this IApplicationBuilder builder)
+    public static IServiceCollection AddCaching(this IServiceCollection services)
+    {
+        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(Config.GetConnectionString("Redis")!));
+        return services;
+    }
+
+    public static IServiceCollection AddJobs(this IServiceCollection services)
+    {
+        services.AddQuartz(q =>
+        {
+            q.UseInMemoryStore();
+
+            q.ScheduleJob<TestJob>(trigger => trigger
+                .WithIdentity("Combined Configuration Trigger")
+                .StartAt(TestJob.StartAt)
+                .WithCalendarIntervalSchedule(TestJob.GetJobScheduler())
+                .WithDescription("My awesome trigger configured for a job with single call"));
+        });
+
+        services.AddQuartzServer(options =>
+        {
+            options.WaitForJobsToComplete = true;
+        });
+        return services;
+    }
+
+    public static IApplicationBuilder UseApplicationMiddlewares(this IApplicationBuilder builder)
     {
         var middlewares = typeof(SeptupExtensions).Assembly
             .GetTypes()

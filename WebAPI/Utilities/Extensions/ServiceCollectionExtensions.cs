@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Reflection;
 using WebAPI.Utilities.Attributes;
 
@@ -17,7 +18,7 @@ public static class ServiceCollectionExtensions
         assembly ??= Assembly.GetCallingAssembly();
 
         var typesWithAttribute = assembly.GetTypes()
-            .Where(type => type.IsClass && !type.IsAbstract && type.GetCustomAttribute<ServiceAttribute>() != null);
+            .Where(type => type.IsClass && !type.IsAbstract && type.GetCustomAttribute<ServiceAttribute>() != null).ToImmutableArray();
 
         foreach (var implementationType in typesWithAttribute)
         {

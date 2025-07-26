@@ -50,7 +50,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("TestsId");
 
-                    b.ToTable("TestCollectionTestExam");
+                    b.ToTable("TestCollectionTestExam", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
@@ -78,7 +78,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("ChapterId");
 
-                    b.ToTable("ChapterQuizzes");
+                    b.ToTable("ChapterQuizzes", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestion", b =>
@@ -100,7 +100,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("ChapterId");
 
-                    b.ToTable("ChapterQuizQuestions");
+                    b.ToTable("ChapterQuizQuestions", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuizQuestionOption", b =>
@@ -125,7 +125,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("ChapterQuizQuestionId");
 
-                    b.ToTable("ChapterQuizQuestionOptions");
+                    b.ToTable("ChapterQuizQuestionOptions", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.Course", b =>
@@ -196,7 +196,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.CourseChapter", b =>
@@ -227,7 +227,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseChapters");
+                    b.ToTable("CourseChapters", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.CourseEnrollment", b =>
@@ -271,7 +271,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseEnrollments");
+                    b.ToTable("CourseEnrollments", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.CourseLesson", b =>
@@ -312,7 +312,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("ChapterId");
 
-                    b.ToTable("CourseLessons");
+                    b.ToTable("CourseLessons", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.CourseRating", b =>
@@ -350,7 +350,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseRatings");
+                    b.ToTable("CourseRatings", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.LessonAttachment", b =>
@@ -372,7 +372,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("CourseAttachments");
+                    b.ToTable("CourseAttachments", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.LessonProgress", b =>
@@ -399,7 +399,7 @@ namespace WebAPI.Migrations
                     b.HasIndex("LessonId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("LessonProgress");
+                    b.ToTable("LessonProgress", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.QuizProgress", b =>
@@ -426,7 +426,7 @@ namespace WebAPI.Migrations
                     b.HasIndex("QuizId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("QuizProgress");
+                    b.ToTable("QuizProgress", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.UserLessonNote", b =>
@@ -459,7 +459,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLessonNotes");
+                    b.ToTable("UserLessonNotes", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._flashCard.FlashCard", b =>
@@ -514,7 +514,7 @@ namespace WebAPI.Migrations
                     b.HasIndex("Term")
                         .IsUnique();
 
-                    b.ToTable("FlashCards");
+                    b.ToTable("FlashCards", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._flashCard.FlashCardSet", b =>
@@ -545,7 +545,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("FlashCardSets");
+                    b.ToTable("FlashCardSets", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._others.Blog", b =>
@@ -591,7 +591,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Blogs", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._others.Resource", b =>
@@ -615,7 +615,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Resources");
+                    b.ToTable("Resources", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._others.Role", b =>
@@ -779,7 +779,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._report.Report", b =>
@@ -822,7 +822,7 @@ namespace WebAPI.Migrations
                     b.HasIndex("UserId", "Type", "TargetId")
                         .IsUnique();
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._report.ReportReason", b =>
@@ -842,7 +842,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportReasons");
+                    b.ToTable("ReportReasons", (string)null);
 
                     b.HasData(
                         new
@@ -921,7 +921,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportStatuses");
+                    b.ToTable("ReportStatuses", (string)null);
 
                     b.HasData(
                         new
@@ -968,7 +968,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.Question", b =>
@@ -1005,7 +1005,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("SectionId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestAnswerSellection", b =>
@@ -1033,7 +1033,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("TestAttemptId");
 
-                    b.ToTable("TestAnswerSellections");
+                    b.ToTable("TestAnswerSellections", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestAttempt", b =>
@@ -1065,7 +1065,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TestAttempts");
+                    b.ToTable("TestAttempts", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestCollection", b =>
@@ -1101,7 +1101,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
-                    b.ToTable("TestCollections");
+                    b.ToTable("TestCollections", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestComment", b =>
@@ -1136,7 +1136,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("TestComments");
+                    b.ToTable("TestComments", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestExam", b =>
@@ -1178,7 +1178,7 @@ namespace WebAPI.Migrations
 
                     NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
-                    b.ToTable("TestExams");
+                    b.ToTable("TestExams", (string)null);
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestSection", b =>
@@ -1203,7 +1203,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("TestSections");
+                    b.ToTable("TestSections", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>

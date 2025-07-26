@@ -1,14 +1,14 @@
 ﻿using FastEndpoints;
 using WebAPI.Data;
 using WebAPI.Endpoints.AdminEndpoints.ContentModerating.HideBlog;
-using WebAPI.Services;
+using WebAPI.Services.Contract;
 
 namespace WebAPI.Endpoints.AdminEndpoints.ContentModerating.ChangeBlogVisibility;
 
-public class Endpoint(ApplicationDbContext context, CurrentUserService currentUserService) : Endpoint<ChangeBlogVisibilityRequest>
+public class Endpoint(ApplicationDbContext context, ICurrentUserService currentUserService) : Endpoint<ChangeBlogVisibilityRequest>
 {
     private readonly ApplicationDbContext _context = context;
-    private readonly CurrentUserService _currentUserService = currentUserService;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public override void Configure()
     {

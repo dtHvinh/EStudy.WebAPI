@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using WebAPI.Models._others;
+using WebAPI.Services.Contract;
 using WebAPI.Utilities.Attributes;
 
 namespace WebAPI.Services;
 
-[Service(ServiceLifetime.Transient)]
-public class CurrentUserService(UserManager<User> userManager, IHttpContextAccessor context)
+[Service(ServiceLifetime.Scoped)]
+public class CurrentUserService(UserManager<User> userManager,
+                                IHttpContextAccessor context) : ICurrentUserService
 {
     private readonly UserManager<User> _userManager = userManager;
+
     public string? Id => context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     private string GetIdInternal()
@@ -29,6 +32,11 @@ public class CurrentUserService(UserManager<User> userManager, IHttpContextAcces
     {
         var userId = GetIdInternal();
         return int.Parse(userId);
+    }
+
+    public string GetIdAsString()
+    {
+        return GetIdInternal();
     }
 
     public async Task<bool> IsInRoleAsync(string roleName)
