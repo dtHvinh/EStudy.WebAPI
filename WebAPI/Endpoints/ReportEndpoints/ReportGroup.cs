@@ -8,6 +8,7 @@ public class ReportGroup : Group
     {
         Configure("reports", ep =>
         {
+            ep.Description(d => d.WithTags("Report"));
         });
     }
 }

@@ -9,6 +9,7 @@ public class FlashCardGroup : Group
         {
             Configure("flash-cards", cf =>
             {
+                cf.Description(d => d.WithTags("Flash card"));
             });
         }
     }

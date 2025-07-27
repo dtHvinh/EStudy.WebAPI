@@ -8,6 +8,7 @@ public class AdminGroup : Group
     {
         Configure("admin", cf =>
         {
+            cf.Description(d => d.WithTags("Admin"));
         });
     }
 }

@@ -8,6 +8,7 @@ public class TestGroup : Group
     {
         Configure("tests", cf =>
         {
+            cf.Description(d => d.WithTags("Test exam"));
         });
     }
 }

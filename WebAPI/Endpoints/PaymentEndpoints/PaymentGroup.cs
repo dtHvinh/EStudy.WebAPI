@@ -8,6 +8,7 @@ public class PaymentGroup : Group
     {
         Configure("payments", ep =>
         {
+            ep.Description(d => d.WithTags("Payment"));
         });
     }
 }

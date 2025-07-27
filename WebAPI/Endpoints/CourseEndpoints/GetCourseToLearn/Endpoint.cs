@@ -14,6 +14,13 @@ public class Endpoint(ApplicationDbContext context, ICurrentUserService currentU
     public override void Configure()
     {
         Get("{CourseId}/learn");
+        Description(x => x
+            .WithName("Get Course To Learn")
+            .WithDescription("Retrieve course details for learning, including chapters and lessons")
+            .Produces<GetCourseToLearnResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
 

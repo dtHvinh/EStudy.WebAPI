@@ -12,6 +12,13 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetMyCourseReques
     public override void Configure()
     {
         Get("mine");
+        Description(x => x
+            .WithName("Get My Courses")
+            .WithDescription("Retrieve a list of courses created by the user")
+            .Produces<List<GetMyCourseResponse>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
 

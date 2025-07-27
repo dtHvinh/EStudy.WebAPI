@@ -1,4 +1,5 @@
 using FastEndpoints;
+using Scalar.AspNetCore;
 using Serilog;
 using System.Reflection;
 using System.Text.Json;
@@ -47,6 +48,7 @@ app.UseSerilogRequestLogging();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseCors("Default");

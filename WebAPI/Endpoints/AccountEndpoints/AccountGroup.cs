@@ -8,6 +8,7 @@ public sealed class AccountGroup : Group
     {
         Configure("account", ep =>
         {
+            ep.Description(d => d.WithTags("Account"));
         });
     }
 }

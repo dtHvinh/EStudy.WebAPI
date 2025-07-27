@@ -13,7 +13,12 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<MarkLessonAsCompl
     public override void Configure()
     {
         Post("lessons/{LessonId}/completed");
-        Description(x => x.WithName("Mark Lesson As Completed").WithSummary("Marks a lesson as completed for a specific course."));
+        Description(x => x
+            .WithName("Mark Lesson as Completed")
+            .WithDescription("Marks a lesson as completed for the user")
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(MarkLessonAsCompletedRequest request, CancellationToken ct)

@@ -8,6 +8,7 @@ public class WordGroup : Group
     {
         Configure("words", cf =>
         {
+            cf.Description(d => d.WithTags("Word"));
         });
     }
 }

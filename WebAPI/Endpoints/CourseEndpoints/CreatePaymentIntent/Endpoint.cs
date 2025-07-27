@@ -24,7 +24,8 @@ public class Endpoint(
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status403Forbidden)
-            .ProducesProblem(StatusCodes.Status500InternalServerError));
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
 

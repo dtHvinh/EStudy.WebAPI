@@ -9,6 +9,7 @@ public class UserGroup : Group
         {
             Configure("user", cf =>
             {
+                cf.Description(d => d.WithTags("User"));
             });
         }
     }

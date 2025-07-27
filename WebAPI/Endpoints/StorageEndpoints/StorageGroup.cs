@@ -8,6 +8,7 @@ public class StorageGroup : Group
     {
         Configure("storage", cf =>
         {
+            cf.Description(d => d.WithTags("Storage"));
         });
     }
 }

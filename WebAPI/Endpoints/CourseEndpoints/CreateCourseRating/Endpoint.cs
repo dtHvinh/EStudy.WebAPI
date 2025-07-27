@@ -13,8 +13,12 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<CreateCourseRatin
     public override void Configure()
     {
         Post("{CourseId}/ratings");
-        AllowAnonymous();
-        Description(x => x.WithName("CreateOrUpdateCourseRating").WithSummary("Creates or updates a new rating for a specific course."));
+        Description(x => x
+            .WithName("Create or Update Course Rating")
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(CreateCourseRatingRequest request, CancellationToken ct)

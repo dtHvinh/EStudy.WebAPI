@@ -16,7 +16,8 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCoursesRequest
             .WithDescription("Get paginated list of published courses with optional name filtering")
             .Produces<List<GetCourseResponse>>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError));
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(GetCoursesRequest req, CancellationToken ct)

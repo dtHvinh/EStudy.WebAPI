@@ -9,6 +9,12 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<CreateCourseDetai
     public override void Configure()
     {
         Post("");
+        Description(x => x
+            .WithName("Create Course Details")
+            .Produces<CreateCourseDetailsResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
 

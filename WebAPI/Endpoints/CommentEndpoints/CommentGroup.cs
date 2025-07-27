@@ -8,6 +8,7 @@ public class CommentGroup : Group
     {
         Configure("comments", ep =>
         {
+            ep.Description(d => d.WithTags("Comment"));
         });
     }
 }

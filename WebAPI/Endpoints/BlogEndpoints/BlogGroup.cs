@@ -8,6 +8,7 @@ public class BlogGroup : Group
     {
         Configure("blogs", cf =>
         {
+            cf.Description(d => d.WithTags("Blog"));
         });
     }
 }

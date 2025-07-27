@@ -20,7 +20,8 @@ public class Endpoint(ApplicationDbContext context)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError)
-            .WithDescription("Get course structure"));
+            .WithDescription("Get course structure")
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(GetCourseStructureRequest request, CancellationToken ct)

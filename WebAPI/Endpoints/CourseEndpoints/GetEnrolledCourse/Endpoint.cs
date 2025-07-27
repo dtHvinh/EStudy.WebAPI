@@ -11,7 +11,14 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetEnrolledCourse
     public override void Configure()
     {
         Get("enrolled");
-        Description(x => x.WithName("Get Enrolled Courses").WithSummary("Retrieves a list of courses the user is enrolled in."));
+        Description(e => e
+            .WithName("Get Enrolled Courses")
+            .WithDescription("Retrieve a list of courses the user is enrolled in, with optional search query")
+            .Produces<List<GetEnrolledCourseResponse>>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
+
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(GetEnrolledCourseRequest request, CancellationToken ct)

@@ -11,6 +11,13 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseDetailsR
     public override void Configure()
     {
         Get("{CourseId}");
+        Description(d => d
+            .WithName("Get Course Details")
+            .WithDescription("Retrieve detailed information about a specific course")
+            .Produces<GetCourseDetailsResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
 

@@ -11,8 +11,13 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetMyCourseRating
     public override void Configure()
     {
         Get("{CourseId}/ratings/my");
-        AllowAnonymous();
-        Description(x => x.WithName("GetMyCourseRating").WithSummary("Retrieves the user's rating for a specific course."));
+        Description(d => d
+            .WithName("Get My Course Rating")
+            .WithDescription("Retrieve the rating and review given by the user for a specific course")
+            .Produces<GetMyCourseRatingResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .WithTags("Courses"));
         Group<CourseGroup>();
     }
     public override async Task HandleAsync(GetMyCourseRatingRequest request, CancellationToken ct)
