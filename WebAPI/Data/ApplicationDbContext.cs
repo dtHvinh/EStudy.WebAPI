@@ -7,6 +7,7 @@ using WebAPI.Models._others;
 using WebAPI.Models._payment;
 using WebAPI.Models._report;
 using WebAPI.Models._testExam;
+using WebAPI.Models._words;
 
 namespace WebAPI.Data;
 
@@ -46,6 +47,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ReportReason> ReportReasons { get; set; } = default!;
     public DbSet<Report> Reports { get; set; } = default!;
     public DbSet<ReportStatus> ReportStatuses { get; set; } = default!;
+
+    public DbSet<Word> Words { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -122,6 +125,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 p => p.SearchVector,
                 "english",
                 p => new { p.Name })
+            .HasIndex(p => p.SearchVector)
+            .HasMethod("GIN");
+
+        builder.Entity<Word>()
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",
+                p => new { p.Text })
             .HasIndex(p => p.SearchVector)
             .HasMethod("GIN");
 
