@@ -12,10 +12,10 @@ using WebAPI.Data;
 using WebAPI.Middlewares.Contract;
 using WebAPI.Models._others;
 using WebAPI.Services;
-
+using IOE = System.InvalidOperationException;
 namespace WebAPI.Utilities.Extensions;
 
-public static class SeptupExtensions
+public static class SetupExtensions
 {
     public static IConfiguration Config { get; set; } = default!;
 
@@ -106,14 +106,14 @@ public static class SeptupExtensions
     public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         // Register services using the attribute-based approach
-        services.AddServicesFromAssembly(typeof(SeptupExtensions).Assembly);
+        services.AddServicesFromAssembly(typeof(SetupExtensions).Assembly);
 
         services.AddSingleton(cf =>
         {
             var supabaseKey = Config["Supabase:Key"]
-            ?? throw new InvalidOperationException("Supabase Key must be configured");
+            ?? throw new IOE("Supabase Key must be configured");
             var supabaseUrl = Config["Supabase:Url"]
-            ?? throw new InvalidOperationException("Supabase Url must be configured");
+            ?? throw new IOE("Supabase Url must be configured");
 
             var storage = new Services.FileService(supabaseUrl, supabaseKey);
             storage.InitializeAsync();
@@ -130,7 +130,7 @@ public static class SeptupExtensions
         {
             var client = cf.GetRequiredService<IMinioClient>();
             var bucketName = Config["Minio:BucketName"]
-            ?? throw new InvalidOperationException("Minio bucket name must be configured");
+            ?? throw new IOE("Minio bucket name must be configured");
 
             var bucketArgs = new BucketArgs { BucketName = bucketName };
 
@@ -175,7 +175,7 @@ public static class SeptupExtensions
 
     public static IApplicationBuilder UseApplicationMiddlewares(this IApplicationBuilder builder)
     {
-        var middlewares = typeof(SeptupExtensions).Assembly
+        var middlewares = typeof(SetupExtensions).Assembly
             .GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract && typeof(IApplicationMiddleware).IsAssignableFrom(t))
             .ToList();

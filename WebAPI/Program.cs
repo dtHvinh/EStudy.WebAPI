@@ -16,7 +16,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
                    rollingInterval: RollingInterval.Day,
                    retainedFileCountLimit: 7));
 
-SeptupExtensions.Config = builder.Configuration;
+SetupExtensions.Config = builder.Configuration;
 
 builder.Services.AddOpenApi();
 builder.Services.AddClients();

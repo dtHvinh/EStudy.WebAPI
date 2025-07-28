@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Storage\WebAPI.Storage.csproj" />
+    <ProjectReference Include="..\WebAPI.AI\WebAPI.AI.csproj" />
     <ProjectReference Include="..\WebCrawler\WebAPI.WebCrawler.csproj" />
   </ItemGroup>
 
