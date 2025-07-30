@@ -1,4 +1,5 @@
-﻿using OllamaSharp.Models.Chat;
+﻿using OllamaSharp.Models;
+using OllamaSharp.Models.Chat;
 using WebAPI.AI.Extensions;
 
 namespace WebAPI.AI.Builder;
@@ -9,6 +10,9 @@ public class RequestBuilder
     private bool Stream { get; set; } = EnglishAssistantOptions.Default.Stream;
     private List<Message>? Messages { get; set; }
     private string? SystemPrompt { get; set; } = null;
+
+    private string? Prompt { get; set; } = null;
+    private object? JsonSchema { get; set; } = null;
 
     private RequestBuilder() { }
 
@@ -63,6 +67,20 @@ public class RequestBuilder
         return this;
     }
 
+    public RequestBuilder WithJsonSchema(object jsonSchema)
+    {
+        ArgumentNullException.ThrowIfNull(jsonSchema, nameof(jsonSchema));
+        JsonSchema = jsonSchema;
+        return this;
+    }
+
+    public RequestBuilder WithPrompt(string prompt)
+    {
+        ArgumentNullException.ThrowIfNull(prompt, nameof(prompt));
+        Prompt = prompt;
+        return this;
+    }
+
     public ChatRequest BuildChatRequest()
     {
         if (Messages is null || Messages.Count == 0)
@@ -78,6 +96,21 @@ public class RequestBuilder
             Think = Think,
             Stream = Stream,
         };
+    }
+
+    public GenerateRequest BuildGenerateRequest()
+    {
+        ArgumentNullException.ThrowIfNull(Prompt, nameof(Prompt));
+
+        var req = new GenerateRequest()
+        {
+            Prompt = Prompt,
+            Stream = Stream,
+            Format = JsonSchema,
+            System = SystemPrompt
+        };
+
+        return req;
     }
 }
 

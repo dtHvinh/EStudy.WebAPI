@@ -12,7 +12,7 @@ public class TestJob(Serilog.ILogger logger) : IJob
     {
         return CalendarIntervalScheduleBuilder
                                 .Create()
-                                .WithIntervalInSeconds(5)
+                                .WithIntervalInSeconds(35)
                                 .WithMisfireHandlingInstructionFireAndProceed();
     }
 

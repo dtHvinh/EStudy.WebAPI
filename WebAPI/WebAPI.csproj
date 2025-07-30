@@ -37,4 +37,8 @@
     <ProjectReference Include="..\WebCrawler\WebAPI.WebCrawler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AI\JsonSchema\" />
+  </ItemGroup>
+
 </Project>

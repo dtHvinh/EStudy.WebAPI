@@ -42,4 +42,14 @@ public static class ObjectExtensions
         response.IsReadOnly = isReadonly;
         return response;
     }
+
+    public static string ToWellFormStreamResponse(this string? content)
+    {
+        if (string.IsNullOrEmpty(content))
+        {
+            return string.Empty;
+        }
+        // Ensure the content is well-formed for streaming
+        return $"data: {content}\n\n";
+    }
 }

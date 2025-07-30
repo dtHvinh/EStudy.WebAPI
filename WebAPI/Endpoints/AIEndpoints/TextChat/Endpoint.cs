@@ -29,11 +29,9 @@ public sealed class Endpoint(IOllamaEnglishAssistant assistant) : Endpoint<TextC
 
         await foreach (var token in stream)
         {
-            if (token is not null)
+            if (token is not null && !string.IsNullOrEmpty(token.Message.Content))
             {
-                var chunk = $"data: {token.Message.Content}\n\n";
-                await HttpContext.Response.WriteAsync(chunk, ct);
-                await HttpContext.Response.Body.FlushAsync(ct);
+                await HttpContext.SendMessageAsync(token.Message.Content, ct);
             }
         }
     }

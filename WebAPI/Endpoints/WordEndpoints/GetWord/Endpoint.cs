@@ -22,16 +22,14 @@ public sealed class GetWordsEndpoint(ApplicationDbContext context) : Endpoint<Ge
             .OrderBy(w => w.Id).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(req.Name))
-            q = q.Where(w => w.Text.Contains(req.Name));
+            q = q.Where(w => w.Text.Contains(req.Name.ToLower()));
 
         var words = await q
             .Select(w => new GetWordResponse
             {
                 Id = w.Id,
                 Text = w.Text,
-                Rank = EF.Functions.ToTsVector("english", w.Text).Rank(EF.Functions.PhraseToTsQuery(req.Name!))
             })
-            .OrderByDescending(w => w.Rank)
             .Paginate(req.Page, req.PageSize)
             .ToListAsync(ct);
 
