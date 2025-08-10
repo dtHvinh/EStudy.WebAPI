@@ -35,7 +35,7 @@ public class Endpoint(ApplicationDbContext context)
             EarnedPoints = req.EarnedPoints,
             AnswerSelections = [.. req.AnswerSelections
             .SelectMany(q =>
-                q.SelectedAnswerIds.Select(answerId => new TestAnswerSellection
+                q.SelectedAnswerIds.Select(answerId => new TestAnswerSelection
                 {
                     QuestionId = q.QuestionId,
                     SelectedAnswerId = answerId,

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NpgsqlTypes;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebAPI.Models._ai;
 using WebAPI.Models._course;
 using WebAPI.Models._flashCard;
 
@@ -24,4 +25,5 @@ public class User : IdentityUser<int>
     public ICollection<FlashCardSet> FlashCardSets { get; set; } = default!;
     public ICollection<CourseEnrollment> Enrollments { get; set; } = default!;
     public ICollection<Course> Courses { get; set; } = default!;
+    public ICollection<Conversation> AIConversations { get; set; } = default!;
 }

@@ -26,7 +26,17 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<ProcessReportRequ
 
         if (req.Action == "warn-user")
         {
-            return; // TODO: Implement warn user logic
+            var user = await _context.Users.FindAsync([report.UserId], ct);
+            if (user == null)
+            {
+                await SendNotFoundAsync(ct);
+                return;
+            }
+
+            user.WarningCount += 1;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync(ct);
+            return;
         }
 
         // Action can be "Resolved" or "Rejected" or "UnderReview"

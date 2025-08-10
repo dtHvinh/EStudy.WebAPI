@@ -53,6 +53,70 @@ namespace WebAPI.Migrations
                     b.ToTable("TestCollectionTestExam");
                 });
 
+            modelBuilder.Entity("WebAPI.Models._ai.Conversation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Context")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("LastActive")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Conversations");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._ai.ConversationMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ConversationId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsUserMessage")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("ConversationMessages");
+                });
+
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
                 {
                     b.Property<int>("Id")
@@ -594,30 +658,6 @@ namespace WebAPI.Migrations
                     b.ToTable("Blogs");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._others.Resource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ResourceUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Resources");
-                });
-
             modelBuilder.Entity("WebAPI.Models._others.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -979,11 +1019,11 @@ namespace WebAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Explanation")
+                    b.Property<string>("AudioUrl")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ParentQuestionId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Explanation")
+                        .HasColumnType("text");
 
                     b.Property<int>("Points")
                         .HasColumnType("integer");
@@ -1001,14 +1041,12 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentQuestionId");
-
                     b.HasIndex("SectionId");
 
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._testExam.TestAnswerSellection", b =>
+            modelBuilder.Entity("WebAPI.Models._testExam.TestAnswerSelection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1033,7 +1071,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("TestAttemptId");
 
-                    b.ToTable("TestAnswerSellections");
+                    b.ToTable("TestAnswerSelections");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestAttempt", b =>
@@ -1118,9 +1156,6 @@ namespace WebAPI.Migrations
                     b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("ParentCommentId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TestId")
                         .HasColumnType("integer");
 
@@ -1131,8 +1166,6 @@ namespace WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("TestId");
 
@@ -1253,6 +1286,28 @@ namespace WebAPI.Migrations
                         .HasForeignKey("TestsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebAPI.Models._ai.Conversation", b =>
+                {
+                    b.HasOne("WebAPI.Models._others.User", "User")
+                        .WithMany("AIConversations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._ai.ConversationMessage", b =>
+                {
+                    b.HasOne("WebAPI.Models._ai.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
@@ -1511,22 +1566,16 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models._testExam.Question", b =>
                 {
-                    b.HasOne("WebAPI.Models._testExam.Question", "ParentQuestion")
-                        .WithMany("SubQuestions")
-                        .HasForeignKey("ParentQuestionId");
-
                     b.HasOne("WebAPI.Models._testExam.TestSection", "Section")
                         .WithMany("Questions")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ParentQuestion");
-
                     b.Navigation("Section");
                 });
 
-            modelBuilder.Entity("WebAPI.Models._testExam.TestAnswerSellection", b =>
+            modelBuilder.Entity("WebAPI.Models._testExam.TestAnswerSelection", b =>
                 {
                     b.HasOne("WebAPI.Models._testExam.Question", "Question")
                         .WithMany()
@@ -1591,10 +1640,6 @@ namespace WebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Models._testExam.TestComment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId");
-
                     b.HasOne("WebAPI.Models._testExam.TestExam", "Test")
                         .WithMany("Comments")
                         .HasForeignKey("TestId")
@@ -1602,8 +1647,6 @@ namespace WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
-
-                    b.Navigation("ParentComment");
 
                     b.Navigation("Test");
                 });
@@ -1628,6 +1671,11 @@ namespace WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("WebAPI.Models._ai.Conversation", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("WebAPI.Models._course.ChapterQuiz", b =>
@@ -1672,6 +1720,8 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models._others.User", b =>
                 {
+                    b.Navigation("AIConversations");
+
                     b.Navigation("Blogs");
 
                     b.Navigation("Courses");
@@ -1684,18 +1734,11 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models._testExam.Question", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("SubQuestions");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestAttempt", b =>
                 {
                     b.Navigation("AnswerSelections");
-                });
-
-            modelBuilder.Entity("WebAPI.Models._testExam.TestComment", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("WebAPI.Models._testExam.TestExam", b =>

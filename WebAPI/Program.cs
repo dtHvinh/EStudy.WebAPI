@@ -56,7 +56,6 @@ app.UseCors("Default");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseApplicationMiddlewares();
 
 app.UseDefaultExceptionHandler().UseFastEndpoints(c =>

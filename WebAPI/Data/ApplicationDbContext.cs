@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Models._ai;
 using WebAPI.Models._course;
 using WebAPI.Models._flashCard;
 using WebAPI.Models._others;
@@ -14,7 +15,6 @@ namespace WebAPI.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<User, Role, int>(options)
 {
-    public DbSet<Resource> Resources { get; set; } = default!;
     public DbSet<Blog> Blogs { get; set; } = default!;
 
     public DbSet<CourseChapter> Chapters { get; set; } = default!;
@@ -35,7 +35,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<Answer> Answers { get; set; } = default!;
     public DbSet<Question> Questions { get; set; } = default!;
-    public DbSet<TestAnswerSellection> TestAnswerSellections { get; set; } = default!;
+    public DbSet<TestAnswerSelection> TestAnswerSellections { get; set; } = default!;
     public DbSet<TestAttempt> TestAttempts { get; set; } = default!;
     public DbSet<TestCollection> TestCollections { get; set; } = default!;
     public DbSet<TestExam> TestExams { get; set; } = default!;
@@ -49,6 +49,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ReportStatus> ReportStatuses { get; set; } = default!;
 
     public DbSet<Word> Words { get; set; } = default!;
+
+    public DbSet<Conversation> Conversations { get; set; } = default!;
+    public DbSet<ConversationMessage> ConversationMessages { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

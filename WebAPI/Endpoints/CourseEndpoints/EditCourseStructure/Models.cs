@@ -1,4 +1,7 @@
-﻿namespace WebAPI.Endpoints.CourseEndpoints.EditCourseStructure;
+﻿using FastEndpoints;
+using FluentValidation;
+
+namespace WebAPI.Endpoints.CourseEndpoints.EditCourseStructure;
 
 public sealed class CourseChapterRequest
 {
@@ -63,6 +66,15 @@ public sealed class EditCourseStructureRequest
     public int EstimatedDurationHours { get; set; } = 0;
 
     public List<CourseChapterRequest> Chapters { get; set; } = default!;
+
+    public sealed class Validator : Validator<EditCourseStructureRequest>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Title).NotEmpty().WithMessage("Course title is required.");
+            RuleFor(x => x.Description).NotEmpty().WithMessage("Course description is required.");
+        }
+    }
 }
 
 public sealed class EditCourseStructureResponse

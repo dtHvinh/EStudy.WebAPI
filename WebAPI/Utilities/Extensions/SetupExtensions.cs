@@ -91,6 +91,7 @@ public static class SetupExtensions
                                    policy.WithOrigins(
                                        "http://localhost:7285",
                                        "http://localhost:3000",
+                                       "http://localhost:7186",
                                        "https://stunning-full-heron.ngrok-free.app",
                                        "https://e-study-client.vercel.app"
                                        );
@@ -159,10 +160,10 @@ public static class SetupExtensions
         {
             q.UseInMemoryStore();
 
-            q.ScheduleJob<TestJob>(trigger => trigger
+            q.ScheduleJob<PaymentIntentCleanUpJob>(trigger => trigger
                 .WithIdentity("Combined Configuration Trigger")
-                .StartAt(TestJob.StartAt)
-                .WithCalendarIntervalSchedule(TestJob.GetJobScheduler())
+                .StartAt(PaymentIntentCleanUpJob.StartAt)
+                .WithCalendarIntervalSchedule(PaymentIntentCleanUpJob.GetJobScheduler())
                 .WithDescription("My awesome trigger configured for a job with single call"));
         });
 

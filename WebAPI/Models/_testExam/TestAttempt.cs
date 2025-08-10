@@ -21,5 +21,5 @@ public class TestAttempt : IEntityWithTime<int>
     public int TimeSpent { get; set; } // in seconds
     public int EarnedPoints { get; set; }
 
-    public ICollection<TestAnswerSellection> AnswerSelections { get; set; } = default!;
+    public ICollection<TestAnswerSelection> AnswerSelections { get; set; } = default!;
 }

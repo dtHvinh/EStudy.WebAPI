@@ -19,7 +19,9 @@ public sealed class CreateTestRequest
             public required string Type { get; set; }
             public string? Text { get; set; }
             public int Points { get; set; }
+            public string? AudioUrl { get; set; }
             public List<AnswerRequest>? Answers { get; set; }
+            public string? Explanation { get; set; }
 
             public sealed class AnswerRequest
             {

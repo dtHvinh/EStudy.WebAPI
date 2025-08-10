@@ -13,7 +13,9 @@ public class Report : IEntityWithTime<int>
 
     public string Type { get; set; } = default!;
     public int TargetId { get; set; }
-    public int UserId { get; set; } = 0;
+
+    [ForeignKey(nameof(User))]
+    public int UserId { get; set; }
     public User? User { get; set; } = null;
 
     public required string Description { get; set; }

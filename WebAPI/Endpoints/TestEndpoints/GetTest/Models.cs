@@ -33,6 +33,7 @@ public class GetTestQuestion
     public string Text { get; set; } = default!;
     public int Points { get; set; }
     public string? Explanation { get; set; } = default!;
+    public string? AudioUrl { get; set; } = default!;
     public List<GetTestAnswer> Answers { get; set; } = default!;
 }
 

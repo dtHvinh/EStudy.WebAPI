@@ -1,7 +1,7 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using WebAPI.Models._others;
+using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.UserEndpoints.Update;
 
@@ -19,7 +19,7 @@ internal class Endpoint(UserManager<User> userManager)
 
     public override async Task HandleAsync(UpdateUserRequest req, CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = this.RetrieveUserId();
 
         if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out var _))
         {

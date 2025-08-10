@@ -24,6 +24,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCoursesRequest
     {
         var nameQuery = Query<string>("query", false);
         var priceQuery = Query<string>("price", false);
+        var difficulty = Query<string>("difficulty", false);
 
         var courses = context.Courses.Where(e => e.IsPublished);
 
@@ -37,6 +38,10 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCoursesRequest
             {
                 courses = courses.Where(c => !c.IsFree);
             }
+        }
+        if (!string.IsNullOrEmpty(difficulty) && difficulty != "All")
+        {
+            courses = courses.Where(c => c.DifficultyLevel == difficulty);
         }
         if (!string.IsNullOrEmpty(nameQuery))
         {

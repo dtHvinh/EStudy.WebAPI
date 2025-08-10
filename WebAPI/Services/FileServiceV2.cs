@@ -13,6 +13,7 @@ public enum StorageFileType
     Video,
     File,
     Image,
+    Audio,
 }
 
 public class FileServiceV2(IMinioClient client, BucketArgs bucketArgs)

@@ -22,14 +22,14 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCollectionsReq
     {
         var query = Query<string>("query", false);
 
-        var q = _context.TestCollections
-            .Paginate(request.Page, request.PageSize);
+        var q = _context.TestCollections.Where(e => e.AuthorId == int.Parse(this.RetrieveUserId()));
 
         if (!string.IsNullOrWhiteSpace(query))
             q = q.Where(c => c.SearchVector.Matches(EF.Functions.ToTsQuery(query)));
 
         var res = await q
             .OrderByDescending(e => e.Id)
+            .Paginate(request.Page, request.PageSize)
             .Select(c => new GetCollectionsResponse
             {
                 Id = c.Id,

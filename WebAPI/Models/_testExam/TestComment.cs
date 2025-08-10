@@ -19,9 +19,4 @@ public class TestComment : IBelongToUser<int>, IEntityWithTime<int>
     [ForeignKey(nameof(Author))]
     public int AuthorId { get; set; }
     public User Author { get; set; } = default!;
-
-    [ForeignKey(nameof(ParentComment))]
-    public int? ParentCommentId { get; set; }
-    public TestComment? ParentComment { get; set; }
-    public ICollection<TestComment> Replies { get; set; } = default!;
 }
