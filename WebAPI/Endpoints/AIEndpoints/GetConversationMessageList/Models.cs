@@ -1,4 +1,5 @@
-﻿using WebAPI.Utilities.Pagination;
+﻿using System.Diagnostics;
+using WebAPI.Utilities.Pagination;
 
 namespace WebAPI.Endpoints.AIEndpoints.GetConversationMessageList;
 
@@ -7,6 +8,7 @@ public sealed class GetConversationMessageListRequest : PaginationParams
     public int ConversationId { get; set; }
 }
 
+[DebuggerDisplay("Id = {Id}")]
 public sealed class GetConversationMessageListResponse
 {
     public int Id { get; set; }
