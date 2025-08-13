@@ -1,6 +1,7 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
+using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.CourseEndpoints.GetCourseDetails;
 
@@ -24,7 +25,7 @@ public class Endpoint(ApplicationDbContext context) : Endpoint<GetCourseDetailsR
     public override async Task HandleAsync(GetCourseDetailsRequest req, CancellationToken ct)
     {
         var course = await _context.Courses.Where(c => c.Id == req.CourseId)
-            .ProjectToCourseDetailsResponse()
+            .ProjectToCourseDetailsResponse(int.Parse(this.RetrieveUserId()))
             .FirstOrDefaultAsync(ct);
 
         if (course is null)

@@ -7,7 +7,7 @@ namespace WebAPI.Endpoints.CourseEndpoints.GetCourseDetails;
 public static partial class Mapper
 {
     public static IQueryable<GetCourseDetailsResponse> ProjectToCourseDetailsResponse(
-        this IQueryable<Course> queryable
+        this IQueryable<Course> queryable, int userId
     )
     {
         return Queryable.Select(
@@ -48,7 +48,8 @@ public static partial class Mapper
                     RatingCount = x.Author.Courses.Sum(e => e.Ratings.Count),
                     CourseCount = x.Author.Courses.Count,
                     StudentCount = x.Author.Courses.Select(e => e.Enrollments.Count).DefaultIfEmpty().Sum(),
-                }
+                },
+                IsEnrolled = x.Enrollments.Any(e => e.UserId == userId),
             }
         );
     }

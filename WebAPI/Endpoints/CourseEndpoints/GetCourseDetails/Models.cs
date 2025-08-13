@@ -27,6 +27,8 @@ public sealed class GetCourseDetailsResponse
     public double AverageRating { get; set; } = 0.0;
 
     public InstructorDataResponse? Instructor { get; set; } = default!;
+
+    public bool IsEnrolled { get; set; } = false;
 }
 
 public sealed class InstructorDataResponse
