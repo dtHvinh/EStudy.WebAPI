@@ -1,11 +1,15 @@
 ﻿using FastEndpoints;
+using WebAPI.Constants;
 using WebAPI.Data;
+using WebAPI.Services.Contract;
+using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.TestEndpoints.DeleteTest;
 
-public class Endpoint(ApplicationDbContext context) : EndpointWithoutRequest
+public class Endpoint(ApplicationDbContext context, ICurrentUserService currentUser) : EndpointWithoutRequest
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly ICurrentUserService _currentUser = currentUser;
 
     public override void Configure()
     {
@@ -36,9 +40,30 @@ public class Endpoint(ApplicationDbContext context) : EndpointWithoutRequest
             return;
         }
 
-        _context.TestExams.Remove(test);
-        await _context.SaveChangesAsync(ct);
+        if (await _currentUser.IsAdminAsync())
+        {
+            _context.TestExams.Remove(test);
+            await _context.SaveChangesAsync(ct);
 
-        await SendNoContentAsync(ct);
+            await SendNoContentAsync(ct);
+            return;
+        }
+        else if (await _currentUser.IsInRoleAsync(R.Instructor))
+        {
+            if (test.CreatorId != int.Parse(this.RetrieveUserId()))
+            {
+                await SendForbiddenAsync(ct);
+                return;
+            }
+
+            _context.TestExams.Remove(test);
+            await _context.SaveChangesAsync(ct);
+
+            await SendNoContentAsync(ct);
+            return;
+        }
+
+        ThrowError("You are not authorized to delete this test");
+        return;
     }
 }

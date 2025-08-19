@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NpgsqlTypes;
+﻿using NpgsqlTypes;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Models._flashCard;
 
 [Table("FlashCards")]
-[Index(nameof(Term), IsUnique = true)]
 public class FlashCard
 {
     public int Id { get; set; }

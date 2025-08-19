@@ -7,10 +7,10 @@ using WebAPI.Utilities.Extensions;
 
 namespace WebAPI.Endpoints.FlashCardEndpoints.AddCardToSet;
 
-public class Endpoint(ApplicationDbContext context, FileService fileService) : Endpoint<AddCardRequest, AddCardResponse>
+public class Endpoint(ApplicationDbContext context, FileServiceV2 fileService) : Endpoint<AddCardRequest, AddCardResponse>
 {
     private readonly ApplicationDbContext _context = context;
-    private readonly FileService _fileService = fileService;
+    private readonly FileServiceV2 _fileService = fileService;
 
     public override void Configure()
     {
@@ -45,7 +45,7 @@ public class Endpoint(ApplicationDbContext context, FileService fileService) : E
 
         if (req.Image is not null)
         {
-            var imageUrl = await _fileService.UploadFlashCardImage(req.Image, this.RetrieveUserId(), ct);
+            var imageUrl = await _fileService.UploadFileAsync(req.Image, StorageFileType.Image, ct);
             newFlashCard.ImageUrl = imageUrl;
         }
 
