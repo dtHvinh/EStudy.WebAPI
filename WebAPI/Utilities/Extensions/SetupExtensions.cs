@@ -109,17 +109,17 @@ public static class SetupExtensions
         // Register services using the attribute-based approach
         services.AddServicesFromAssembly(typeof(SetupExtensions).Assembly);
 
-        services.AddSingleton(cf =>
+        var supabaseUrl = Config["Supabase:Url"];
+        var supabaseKey = Config["Supabase:Key"];
+        if (!string.IsNullOrWhiteSpace(supabaseUrl) && !string.IsNullOrWhiteSpace(supabaseKey))
         {
-            var supabaseKey = Config["Supabase:Key"]
-            ?? throw new IOE("Supabase Key must be configured");
-            var supabaseUrl = Config["Supabase:Url"]
-            ?? throw new IOE("Supabase Url must be configured");
-
-            var storage = new Services.FileService(supabaseUrl, supabaseKey);
-            storage.InitializeAsync();
-            return storage;
-        });
+            services.AddSingleton(cf =>
+            {
+                var storage = new Services.FileService(supabaseUrl, supabaseKey);
+                storage.InitializeAsync();
+                return storage;
+            });
+        }
 
         services.AddMinio(cf => cf
                 .WithEndpoint(Config["Minio:Url"])
@@ -143,7 +143,11 @@ public static class SetupExtensions
 
     public static IServiceCollection RegisterPayment(this IServiceCollection services)
     {
-        StripeConfiguration.ApiKey = Config["Stripe:ApiKey"];
+        var stripeApiKey = Config["Stripe:ApiKey"];
+        if (!string.IsNullOrWhiteSpace(stripeApiKey))
+        {
+            StripeConfiguration.ApiKey = stripeApiKey;
+        }
 
         return services;
     }
@@ -187,5 +191,12 @@ public static class SetupExtensions
         }
 
         return builder;
+    }
+
+    public static async Task UseAutoMigration(this IApplicationBuilder builder)
+    {
+        var scope = builder.ApplicationServices.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await db.Database.MigrateAsync();
     }
 }

@@ -29,7 +29,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ChapterQuizQuestionOption> ChapterQuizQuestionOptions { get; set; } = default!;
     public DbSet<QuizProgress> QuizProgresses { get; set; } = default!;
 
-
     public DbSet<FlashCard> FlashCards { get; set; } = default!;
     public DbSet<FlashCardSet> FlashCardSets { get; set; } = default!;
 

@@ -64,4 +64,6 @@ app.UseDefaultExceptionHandler().UseFastEndpoints(c =>
     c.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });
 
-app.Run();
+await app.UseAutoMigration();
+
+await app.RunAsync();
