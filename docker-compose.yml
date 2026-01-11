@@ -14,12 +14,20 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORT=8081
       - ConnectionStrings__Postgre=Host=postgres;Port=5432;Database=estudy;Username=postgres;Password=postgres;
       - ConnectionStrings__Redis=redis:6379
-      - Minio__Url=minio:9000
+      - Minio__Url=minio:9100
       - Minio__BucketName=estudy
       - Minio__AccessKey=admin
       - Minio__SecretKey=password
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SUPABASE__KEY=${SUPABASE_KEY}
+      - SUPABASE__URL=https://whkdgdfrmnsvnybczavj.supabase.co
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+    volumes:
+      - /c/Users/ADMIN/.aspnet/https:/https/
 
   postgres:
     image: postgres:16
@@ -40,30 +48,39 @@ services:
       - redis_data:/data
 
   minio:
-    image: minio/minio:RELEASE.2025-01-20T00-00-00Z
+    image: quay.io/minio/minio:latest
     command: server /data --console-address ":9001"
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=password
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9100:9000"
+      - "9101:9001"
     volumes:
       - minio_data:/data
 
   minio-init:
-    image: minio/mc:RELEASE.2025-01-17T00-00-00Z
+    image: quay.io/minio/minio:latest
     depends_on:
       - minio
     entrypoint:
       - /bin/sh
       - -c
       - |
-        /usr/bin/mc alias set local http://minio:9000 admin password;
-        /usr/bin/mc mb -p local/estudy || true;
-        /usr/bin/mc anonymous set download local/estudy || true;
+        until /usr/bin/mc alias set local http://minio:9000 admin password; do
+          sleep 2
+        done
+        /usr/bin/mc mb -p local/estudy || true
+        /usr/bin/mc anonymous set download local/estudy || true
     restart: "no"
 
+  llmtts:
+    image: hienvinh/llmtts:0.1
+    depends_on:
+      - webapi
+    environment:
+      - SERVER_PORT=8081
+      - SERVER_HOST=webapi
 volumes:
   postgres_data:
   redis_data:
